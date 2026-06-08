@@ -111,6 +111,71 @@ if(isset($_GET['search_product']))
  ?>
 
 <!-- Product -->
+<style>
+	/* --- KODE REDESAIN KARTU ROTI --- */
+	.card-roti {
+		border-radius: 20px;
+		overflow: hidden;
+		box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		background: #fff;
+		padding-bottom: 20px;
+		margin-bottom: 30px;
+		border: 1px solid #f9f9f9;
+		position: relative;
+	}
+	.card-roti:hover {
+		transform: translateY(-8px);
+		box-shadow: 0 15px 35px rgba(128, 0, 128, 0.15);
+	}
+	.card-roti .block2-pic img {
+		height: 250px;
+		object-fit: cover;
+		width: 100%;
+	}
+	.roti-title {
+		font-family: 'Playfair Display', serif;
+		font-weight: 800;
+		font-size: 20px;
+		color: #2b003a;
+		text-align: center;
+		margin-top: 15px;
+		display: block;
+	}
+	.roti-price {
+		font-family: 'Poppins', sans-serif;
+		color: #c2185b;
+		font-weight: 700;
+		font-size: 18px;
+		text-align: center;
+		display: block;
+		margin-top: 5px;
+	}
+	/* Tombol Beli / Pesan Langsung */
+	.btn-pesan-roti {
+		display: block;
+		width: 80%;
+		margin: 15px auto 0;
+		text-align: center;
+		background: #c2185b;
+		color: white !important;
+		border-radius: 30px;
+		padding: 10px 0;
+		font-family: 'Poppins', sans-serif;
+		font-weight: 600;
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		transition: all 0.3s ease;
+		border: none;
+		cursor: pointer;
+	}
+	.btn-pesan-roti:hover {
+		background: #800080;
+		box-shadow: 0 5px 15px rgba(128,0,128,0.3);
+		transform: translateY(-2px);
+	}
+</style>
 	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
@@ -257,134 +322,118 @@ if(isset($_GET['search_product']))
 
 			<?php while ($row = mysqli_fetch_assoc($data)) { ?>	
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
-					<div class="block2">
+					<div class="card-roti">
 						<div class="block2-pic hov-img0">
 							<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
-
-							<!-- <a href="javascript:void(0)" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1 quick_view" attr_id="<?php echo $row['id']; ?>">
-								Quick View
-							</a> -->
 						</div>
 
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									<?php echo $row['name']; ?>
-									<?php if (isset($_GET['search_product'])) { ?>
-										<input type="hidden" name="search_txt" value="<?php echo $_GET['search_product']; ?>" id="srch_txt">
-									<?php } ?>
-									
-								</a>
+						<div class="p-t-14 p-b-10">
+							<span class="roti-title">
+								<?php echo $row['name']; ?>
+							</span>
 
-								<span class="stext-105 cl3">
-									Rs.<?php echo $row['price']; ?>
-								</span>
-							</div>
+							<span class="roti-price">
+								Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
+							</span>
 
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
+							<!-- Form Add to Cart Langsung -->
+							<!-- Pastikan action dikirim ke script proses keranjang. Jika logic cart_submit ada di index.php, gunakan action="" -->
+							<form method="post" action="product.php">
+								<!-- Menyimpan data roti yang dipilih secara tersembunyi -->
+								<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
+								<input type="hidden" name="num_product" value="1">
+								
+								<!-- Karena toko roti biasanya tidak butuh ukuran baju (S/M/L), kita isi value default atau sembunyikan -->
+								<input type="hidden" name="size_select" value="Reguler">
+								<input type="hidden" name="color_select" value="Original">
+								
+								<button type="submit" name="cart_submit" class="btn-pesan-roti">
+									+ Pesan
+								</button>
+							</form>
+
+							<?php if (isset($_GET['search_product'])) { ?>
+								<input type="hidden" name="search_txt" value="<?php echo $_GET['search_product']; ?>" id="srch_txt">
+							<?php } ?>
 						</div>
 					</div>
 				</div>
 			<?php } ?>
 		</div>
 
-		<!-- Pagination -->
+		<!-- Pagination Statis yang Diperbarui -->
+		<div class="flex-l-m flex-w w-full p-t-10 m-lr--7" style="justify-content: center; margin-top: 20px;">
+			<style>
+				.roti-page-btn {
+					width: 40px; height: 40px;
+					border-radius: 50%; border: 1px solid #c2185b;
+					color: #c2185b; font-family: 'Poppins', sans-serif;
+					font-weight: 600; display: flex;
+					align-items: center; justify-content: center;
+					margin: 0 5px; transition: all 0.3s ease;
+					text-decoration: none !important;
+				}
+				.roti-page-btn:hover, .roti-page-btn.active-page {
+					background-color: #c2185b; color: white !important;
+					box-shadow: 0 4px 10px rgba(194, 24, 91, 0.3);
+				}
+				.roti-page-text { padding: 0 15px; border-radius: 20px; width: auto;}
+			</style>
 
-					<div class="flex-l-m flex-w w-full p-t-10 m-lr--7">
+			<!-- Tombol Previous (Sebelumnya) -->
+			<?php if (isset($_GET['search_product'])) {
+				if ($page_no > 1) { ?>
+					<a href="product.php?search_product=<?php echo $_GET['search_product']; ?>&all_pro_p_id_s=<?php echo $previous; ?>" class="roti-page-btn roti-page-text">
+						Sebelumnya
+					</a>
+			<?php } 
+			} else {
+				if ($page_no > 1) { ?>
+					<a href="product.php?all_pro_p_id=<?php echo $previous; ?>" class="roti-page-btn roti-page-text">
+						Sebelumnya
+					</a>
+			<?php }
+			} ?>
 
+			<!-- Tombol Angka Halaman -->
+			<?php 
+			if (isset($_GET['search_product'])) {
+				for ($i = 1; $i <= $page_count_s; $i++) { 
+					$isActive = (isset($_GET['all_pro_p_id_s']) && $_GET['all_pro_p_id_s'] == $i) || (!isset($_GET['all_pro_p_id_s']) && $i == 1) ? 'active-page' : '';
+					?>
+					<a href="product.php?search_product=<?php echo $_GET['search_product']; ?>&all_pro_p_id_s=<?php echo $i; ?>" class="roti-page-btn <?php echo $isActive; ?>">
+						<?php echo $i; ?>
+					</a>
+				<?php } 
+			} else {
+				for ($i = 1; $i <= $page_count; $i++) { 
+					$isActive = (isset($_GET['all_pro_p_id']) && $_GET['all_pro_p_id'] == $i) || (!isset($_GET['all_pro_p_id']) && $i == 1) ? 'active-page' : '';
+					?>
+					<a href="product.php?all_pro_p_id=<?php echo $i; ?>" class="roti-page-btn <?php echo $isActive; ?>">
+						<?php echo $i; ?>
+					</a>
+			<?php } 
+			} ?>
 
-						<?php if (isset($_GET['search_product'])) {
-							if ($page_no>1) { ?>
-								<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 search_product_page_change" attr_id=<?php echo $previous; ?> style="font-size: 13px;">
-									Pre
-								</a>
-						<?php } }
-						else {
-							if ($page_no>1) { ?>
-								<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 all_product_page_change" attr_id=<?php echo $previous; ?> style="font-size: 13px;">
-									Pre
-								</a>
-						<?php }
-						} ?>
-
-						<?php 
-						if (isset($_GET['search_product'])) {
-							for ($i=1; $i<=$page_count_s; $i++) { ?>
-							<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 
-								<?php 
-								if(isset($_GET['all_pro_p_id_s']))
-								{
-									if($_GET['all_pro_p_id_s']==$i)
-									{
-										echo "active-pagination1";
-									}
-									else
-									{
-										echo "";
-									}
-								}
-								else
-								{
-									if($i==1)
-									{
-										echo "active-pagination1";
-									}
-								} ?> search_product_page_change" attr_id=<?php echo $i; ?>>
-								<?php echo $i; ?>
-							</a>
-							<?php } 
-						}
-						else {
-							for ($i=1; $i<=$page_count; $i++) { ?>
-							<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 
-								<?php 
-								if(isset($_GET['all_pro_p_id']))
-								{
-									if($_GET['all_pro_p_id']==$i)
-									{
-										echo "active-pagination1";
-									}
-									else
-									{
-										echo "";
-									}
-								}
-								else
-								{
-									if($i==1)
-									{
-										echo "active-pagination1";
-									}
-								} ?> all_product_page_change" attr_id=<?php echo $i; ?>>
-								<?php echo $i; ?>
-							</a>
-						<?php } } ?>
-
-
-						<?php if (isset($_GET['search_product'])) {
-							if ($page_no<$page_count_s) { ?>
-								<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 search_product_page_change" attr_id=<?php echo $next; ?> style="font-size: 13px;">
-									Next
-								</a>
-						<?php } }
-						else {
-							if ($page_no<$page_count) { ?>
-								<a href="javascript:void(0)" class="flex-c-m how-pagination1 trans-04 m-all-7 all_product_page_change" attr_id=<?php echo $next; ?> style="font-size: 13px;">
-									Next
-								</a>
-						<?php }
-						} ?>
-
-					</div>
-			</div>
-			
+			<!-- Tombol Next (Selanjutnya) -->
+			<?php if (isset($_GET['search_product'])) {
+				if ($page_no < $page_count_s) { ?>
+					<a href="product.php?search_product=<?php echo $_GET['search_product']; ?>&all_pro_p_id_s=<?php echo $next; ?>" class="roti-page-btn roti-page-text">
+						Selanjutnya
+					</a>
+			<?php } 
+			} else {
+				if ($page_no < $page_count) { ?>
+					<a href="product.php?all_pro_p_id=<?php echo $next; ?>" class="roti-page-btn roti-page-text">
+						Selanjutnya
+					</a>
+			<?php }
+			} ?>
 		</div>
-	</div>
+        
+    </div> <!-- Ini penutup div id="all_product_page_change_data" yang sebelumnya hilang -->
+</div> <!-- Ini penutup div container yang sebelumnya hilang -->
+</div> <!-- Ini penutup div pembungkus utama p-b-140 yang sebelumnya hilang -->
 
 	<?php include_once 'footer.php'; ?>
 

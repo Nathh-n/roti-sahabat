@@ -57,17 +57,18 @@ $data_count = mysqli_num_rows($data_total);
 					</a>
 
 					<div class="menu-desktop">
+						<?php $current_page = basename($_SERVER['PHP_SELF']); ?>
 						<ul class="main-menu">
-							<li class="active-menu">
+							<li class="<?php echo ($current_page == 'index.php' || $current_page == '') ? 'active-menu' : ''; ?>">
 								<a href="index.php">Beranda</a>
 							</li>
-							<li>
+							<li class="<?php echo ($current_page == 'product.php' || $current_page == 'product-detail.php') ? 'active-menu' : ''; ?>">
 								<a href="product.php">Menu Kami</a>
 							</li>
-							<li>
+							<li class="<?php echo ($current_page == 'about.php') ? 'active-menu' : ''; ?>">
 								<a href="about.php">Tentang Kami</a>
 							</li>
-							<li>
+							<li class="<?php echo ($current_page == 'contact.php') ? 'active-menu' : ''; ?>">
 								<a href="contact.php">Kontak Kami</a>
 							</li>
 						</ul>
@@ -129,19 +130,21 @@ $data_count = mysqli_num_rows($data_total);
 		</div>
 
 		<div class="menu-mobile">
+			<?php $current_page = basename($_SERVER['PHP_SELF']); ?>
 			<ul class="main-menu-m">
-				<li>
+				<li class="<?php echo ($current_page == 'index.php' || $current_page == '') ? 'active-menu' : ''; ?>">
 					<a href="index.php">Beranda</a>
 				</li>
-				<li>
+				<li class="<?php echo ($current_page == 'product.php' || $current_page == 'product-detail.php') ? 'active-menu' : ''; ?>">
 					<a href="product.php">Menu Kami</a>
 				</li>
-				<li>
+				<li class="<?php echo ($current_page == 'about.php') ? 'active-menu' : ''; ?>">
 					<a href="about.php">Tentang Kami</a>
 				</li>
-				<li>
+				<li class="<?php echo ($current_page == 'contact.php') ? 'active-menu' : ''; ?>">
 					<a href="contact.php">Kontak Kami</a>
 				</li>
+				
 				<?php if (isset($_SESSION['login'])) { ?>
 					<li><a href="my_profile.php">Profil Saya</a></li>
 					<li><a href="logout.php">Logout</a></li>

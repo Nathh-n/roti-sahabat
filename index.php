@@ -15,10 +15,23 @@ $data_product_s = mysqli_query($conn,$sql_select_product_s);
 $sql_select_product_tr = "select * from `product` where `tag` like '%Top-rate%' AND `stock`='In Stock'";
 $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 
-$sql_select_blog = "select * from `blog`";
-$data_blog = mysqli_query($conn,$sql_select_blog);
-
 ?>
+
+<?php
+	if (isset($_POST['submit_msg'])) {
+		$name = mysqli_real_escape_string($conn, $_POST['name']);
+		$email = mysqli_real_escape_string($conn, $_POST['email']);
+		$msg = mysqli_real_escape_string($conn, $_POST['msg']);
+		date_default_timezone_set('Asia/Jakarta');
+		$time = date('Y-m-d H:i:s');
+
+		$sql_insert = "insert into `contact_us`(`name`,`email`,`msg`,`time`)values('$name','$email','$msg','$time')";
+		mysqli_query($conn, $sql_insert);
+		
+		// Munculkan notifikasi popup jika pesan berhasil dikirim
+		echo "<script>alert('Terima kasih! Pesan Sahabat telah berhasil dikirim.');</script>";
+	}
+	?>
 
 	<!-- Slider -->
 	<style>
@@ -146,6 +159,192 @@ $data_blog = mysqli_query($conn,$sql_select_blog);
 			color: white !important;
 			transform: translateY(-3px);
 		}
+
+		.roti-tabs {
+			border-bottom: none;
+			justify-content: center;
+			gap: 15px;
+			margin-bottom: 20px;
+		}
+		.roti-tabs .nav-link {
+			border: none !important;
+			background-color: #f0f0f0;
+			color: #555;
+			border-radius: 50px;
+			padding: 10px 30px;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		.roti-tabs .nav-link.active {
+			background: linear-gradient(135deg, #c2185b, #800080);
+			color: white !important;
+			box-shadow: 0 5px 15px rgba(194, 24, 91, 0.4);
+		}
+		.card-roti {
+			border-radius: 20px;
+			overflow: hidden;
+			box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			background: #fff;
+			padding-bottom: 20px;
+			margin: 10px;
+			border: 1px solid #f9f9f9;
+		}
+		.card-roti:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 15px 35px rgba(128, 0, 128, 0.15);
+		}
+		.card-roti .block2-pic img {
+			height: 250px;
+			object-fit: cover;
+			width: 100%;
+		}
+		.roti-title {
+			font-family: 'Playfair Display', serif;
+			font-weight: 800;
+			font-size: 20px;
+			color: #2b003a;
+			text-align: center;
+			margin-top: 15px;
+			display: block;
+		}
+		.roti-price {
+			font-family: 'Poppins', sans-serif;
+			color: #c2185b;
+			font-weight: 700;
+			font-size: 18px;
+			text-align: center;
+			display: block;
+			margin-top: 5px;
+		}
+		.btn-detail-roti {
+			display: block;
+			width: 70%;
+			margin: 15px auto 0;
+			text-align: center;
+			border: 2px solid #800080;
+			color: #800080;
+			border-radius: 30px;
+			padding: 8px 0;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			font-size: 14px;
+			transition: all 0.3s ease;
+		}
+		.btn-detail-roti:hover {
+			background: #800080;
+			color: white;
+		}
+
+		.sec-contact-home {
+			background-color: #fffafb; /* Latar pink sangat memudar agar lembut */
+			padding: 80px 0;
+			border-top: 2px dashed #fce4ec;
+		}
+		.contact-box {
+			background: #fff;
+			border-radius: 20px;
+			box-shadow: 0 15px 40px rgba(128, 0, 128, 0.08);
+			overflow: hidden;
+		}
+		.contact-info-bg {
+			background: linear-gradient(135deg, #c2185b, #800080);
+			padding: 60px 40px;
+			color: white;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.contact-info-bg h4 {
+			font-family: 'Playfair Display', serif;
+			font-size: 32px;
+			font-weight: 700;
+			margin-bottom: 20px;
+			color: white;
+		}
+		.contact-info-bg p {
+			font-family: 'Poppins', sans-serif;
+			font-size: 15px;
+			color: rgba(255,255,255,0.8);
+			margin-bottom: 40px;
+			line-height: 1.8;
+		}
+		.info-item {
+			display: flex;
+			align-items: center;
+			margin-bottom: 25px;
+		}
+		.info-item i {
+			font-size: 24px;
+			margin-right: 20px;
+			color: #ffb6c1;
+			width: 30px;
+			text-align: center;
+		}
+		.info-item span {
+			font-family: 'Poppins', sans-serif;
+			font-size: 15px;
+			color: white;
+		}
+		.contact-form-wrap {
+			padding: 60px 40px;
+		}
+		.contact-form-wrap h4 {
+			font-family: 'Playfair Display', serif;
+			font-size: 28px;
+			font-weight: 700;
+			color: #2b003a;
+			margin-bottom: 10px;
+		}
+		.contact-form-wrap p {
+			font-family: 'Poppins', sans-serif;
+			font-size: 14px;
+			color: #888;
+			margin-bottom: 30px;
+		}
+		.input-custom {
+			width: 100%;
+			background: #f9f9f9;
+			border: 1px solid #eee;
+			border-radius: 10px;
+			padding: 15px 20px;
+			font-family: 'Poppins', sans-serif;
+			font-size: 14px;
+			margin-bottom: 20px;
+			transition: all 0.3s;
+		}
+		.input-custom:focus {
+			border-color: #c2185b;
+			background: #fff;
+			box-shadow: 0 0 10px rgba(194, 24, 91, 0.1);
+		}
+		textarea.input-custom {
+			min-height: 120px;
+			resize: none;
+		}
+		.btn-kirim {
+			background: #2b003a;
+			color: white !important;
+			border: none;
+			border-radius: 30px;
+			padding: 15px 40px;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			font-size: 15px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			transition: all 0.3s ease;
+			cursor: pointer;
+			display: inline-block;
+			width: auto;
+		}
+		.btn-kirim:hover {
+			background: #c2185b;
+			transform: translateY(-3px);
+			box-shadow: 0 10px 20px rgba(194, 24, 91, 0.3);
+		}
 	</style>
 
 	<section class="hero-roti">
@@ -269,294 +468,200 @@ $data_blog = mysqli_query($conn,$sql_select_blog);
 	<section class="sec-product bg0 p-t-100 p-b-50">
 		<div class="container">
 			<div class="p-b-32">
-				<h3 class="ltext-105 cl5 txt-center respon1">
-					Store Overview
+				<h3 class="ltext-105 cl5 txt-center respon1" style="font-family: 'Playfair Display', serif; color: #2b003a; font-weight: 900;">
+					Menu Favorit Sahabat
 				</h3>
 			</div>
 
-			<!-- Tab01 -->
 			<div class="tab01">
-				<!-- Nav tabs -->
-				<ul class="nav nav-tabs" role="tablist">
-					<li class="nav-item p-b-10">
-						<a class="nav-link active" data-toggle="tab" href="#Best-seller" role="tab">Best Seller</a>
+				<ul class="nav nav-tabs roti-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#Best-seller" role="tab">Terlaris</a>
 					</li>
-
-					<li class="nav-item p-b-10">
-						<a class="nav-link" data-toggle="tab" href="#Featured" role="tab">Featured</a>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#Featured" role="tab">Rekomendasi</a>
 					</li>
-
-					<li class="nav-item p-b-10">
-						<a class="nav-link" data-toggle="tab" href="#Sale" role="tab">Sale</a>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#Sale" role="tab">Promo Spesial</a>
 					</li>
-
-					<li class="nav-item p-b-10">
-						<a class="nav-link" data-toggle="tab" href="#Top-rate" role="tab">Top Rate</a>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#Top-rate" role="tab">Rating Tertinggi</a>
 					</li>
 				</ul>
 
-				<!-- Tab panes -->
-				<div class="tab-content p-t-50">
-					<!-- - -->
+				<div class="tab-content p-t-30">
+					
 					<div class="tab-pane fade show active" id="Best-seller" role="tabpanel">
-						<!-- Slide2 -->
 						<div class="wrap-slick2">
 							<div class="slick2">
-
-
-						<?php while ($row = mysqli_fetch_assoc($data_product_bs)) { ?>
-							
-								<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-									<!-- Block2 -->
-									<div class="block2">
-										<div class="block2-pic hov-img0">
-											<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
-
-											<!-- <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-												Quick View
-											</a> -->
-										</div>
-
-										<div class="block2-txt flex-w flex-t p-t-14">
-											<div class="block2-txt-child1 flex-col-l ">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<?php while ($row = mysqli_fetch_assoc($data_product_bs)) { ?>
+									<div class="item-slick2 p-l-5 p-r-5 p-t-15 p-b-15">
+										<div class="card-roti">
+											<div class="block2-pic hov-img0">
+												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
+											</div>
+											<div class="p-t-14 p-b-10">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
 													<?php echo $row['name']; ?>
 												</a>
-
-												<span class="stext-105 cl3">
-													Rs.<?php echo $row['price']; ?>
+												<span class="roti-price">
+													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
 												</span>
-											</div>
-
-											<div class="block2-txt-child2 flex-r p-t-3">
-												<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-													<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-													<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
+													Lihat Detail
 												</a>
 											</div>
 										</div>
 									</div>
-								</div>
-
-						<?php } ?>
-								
+								<?php } ?>
 							</div>
 						</div>
 					</div>
 
-					<!-- - -->
 					<div class="tab-pane fade" id="Featured" role="tabpanel">
-						<!-- Slide2 -->
 						<div class="wrap-slick2">
 							<div class="slick2">
-
-						<?php while ($row = mysqli_fetch_assoc($data_product_f)) { ?>
-								<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-									<!-- Block2 -->
-									<div class="block2">
-										<div class="block2-pic hov-img0">
-											<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
-
-											<!-- <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-												Quick View
-											</a> -->
-										</div>
-
-										<div class="block2-txt flex-w flex-t p-t-14">
-											<div class="block2-txt-child1 flex-col-l ">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<?php while ($row = mysqli_fetch_assoc($data_product_f)) { ?>
+									<div class="item-slick2 p-l-5 p-r-5 p-t-15 p-b-15">
+										<div class="card-roti">
+											<div class="block2-pic hov-img0">
+												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
+											</div>
+											<div class="p-t-14 p-b-10">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
 													<?php echo $row['name']; ?>
 												</a>
-
-												<span class="stext-105 cl3">
-													Rs.<?php echo $row['price']; ?>
+												<span class="roti-price">
+													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
 												</span>
-											</div>
-
-											<div class="block2-txt-child2 flex-r p-t-3">
-												<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-													<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-													<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
+													Lihat Detail
 												</a>
 											</div>
 										</div>
 									</div>
-								</div>
-						<?php } ?>
+								<?php } ?>
 							</div>
 						</div>
 					</div>
 
-					<!-- - -->
 					<div class="tab-pane fade" id="Sale" role="tabpanel">
-						<!-- Slide2 -->
 						<div class="wrap-slick2">
 							<div class="slick2">
-
-						<?php while ($row = mysqli_fetch_assoc($data_product_s)) { ?>
-								<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-									<!-- Block2 -->
-									<div class="block2">
-										<div class="block2-pic hov-img0">
-											<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
-
-											<!-- <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-												Quick View
-											</a> -->
-										</div>
-
-										<div class="block2-txt flex-w flex-t p-t-14">
-											<div class="block2-txt-child1 flex-col-l ">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<?php while ($row = mysqli_fetch_assoc($data_product_s)) { ?>
+									<div class="item-slick2 p-l-5 p-r-5 p-t-15 p-b-15">
+										<div class="card-roti">
+											<div class="block2-pic hov-img0">
+												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
+											</div>
+											<div class="p-t-14 p-b-10">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
 													<?php echo $row['name']; ?>
 												</a>
-
-												<span class="stext-105 cl3">
-													Rs.<?php echo $row['price']; ?>
+												<span class="roti-price">
+													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
 												</span>
-											</div>
-
-											<div class="block2-txt-child2 flex-r p-t-3">
-												<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-													<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-													<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
+													Lihat Detail
 												</a>
 											</div>
 										</div>
 									</div>
-								</div>
-						<?php } ?>
-
+								<?php } ?>
 							</div>
 						</div>
 					</div>
 
-					<!-- - -->
 					<div class="tab-pane fade" id="Top-rate" role="tabpanel">
-						<!-- Slide2 -->
 						<div class="wrap-slick2">
 							<div class="slick2">
-
-						<?php while ($row = mysqli_fetch_assoc($data_product_tr)) { ?>
-								<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-									<!-- Block2 -->
-									<div class="block2">
-										<div class="block2-pic hov-img0">
-											<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
-
-											<!-- <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-												Quick View
-											</a> -->
-										</div>
-
-										<div class="block2-txt flex-w flex-t p-t-14">
-											<div class="block2-txt-child1 flex-col-l ">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<?php while ($row = mysqli_fetch_assoc($data_product_tr)) { ?>
+									<div class="item-slick2 p-l-5 p-r-5 p-t-15 p-b-15">
+										<div class="card-roti">
+											<div class="block2-pic hov-img0">
+												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
+											</div>
+											<div class="p-t-14 p-b-10">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
 													<?php echo $row['name']; ?>
 												</a>
-
-												<span class="stext-105 cl3">
-													Rs.<?php echo $row['price']; ?>
+												<span class="roti-price">
+													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
 												</span>
-											</div>
-
-											<div class="block2-txt-child2 flex-r p-t-3">
-												<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-													<img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png" alt="ICON">
-													<img class="icon-heart2 dis-block trans-04 ab-t-l" src="images/icons/icon-heart-02.png" alt="ICON">
+												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
+													Lihat Detail
 												</a>
 											</div>
 										</div>
 									</div>
-								</div>
-						<?php } ?>
-
+								<?php } ?>
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
 
-		<!-- Load more -->
-			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="product.php" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load All Products
-				</a>
-			</div>
+		<div class="flex-c-m flex-w w-full p-t-45">
+			<a href="product.php" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04" style="border-radius: 30px;">
+				Lihat Semua Menu
+			</a>
+		</div>
 	</section>
 
-	<!-- Blog -->
-	<section class="sec-blog bg0 p-t-60 p-b-90">
+	<section class="sec-contact-home">
 		<div class="container">
-			<div class="p-b-66">
-				<h3 class="ltext-105 cl5 txt-center respon1">
-					Our Blogs
-				</h3>
-			</div>
-
-			<div class="row">
-		<?php $count=0; while ($row = mysqli_fetch_assoc($data_blog)) { ?>
-				<div class="col-sm-6 col-md-4 p-b-40">
-					<div class="blog-item">
-						<div class="hov-img0">
-							<a href="blog-detail.php?detail_id=<?php echo $row['id']; ?>">
-								<img src="admin/image/<?php echo $row['image']; ?>" alt="IMG-BLOG">
-							</a>
-						</div>
-
-						<div class="p-t-15">
-							<div class="stext-107 flex-w p-b-14">
-								<span class="m-r-3">
-									<span class="cl4">
-										By
-									</span>
-
-									<span class="cl5">
-										Admin
-									</span>
-								</span>
-
-								<span>
-									<span class="cl4">
-										on
-									</span>
-
-									<span class="cl5">
-										<?php echo $row['day']; ?> <?php echo $row['month']; ?>, <?php echo $row['year']; ?>
-									</span>
-								</span>
+			<div class="contact-box">
+				<div class="row m-0">
+					
+					<div class="col-md-5 p-0">
+						<div class="contact-info-bg">
+							<h4>Mari Terhubung</h4>
+							<p>Punya pertanyaan seputar varian roti, pesanan dalam jumlah besar untuk acara, atau sekadar ingin menyapa? Jangan ragu untuk menghubungi kami.</p>
+							
+							<div class="info-item">
+								<i class="fa fa-map-marker"></i>
+								<span>Jl. Roti Manis No. 123, Bandung</span>
 							</div>
-
-							<h4 class="p-b-12">
-								<a href="blog-detail.php?detail_id=<?php echo $row['id']; ?>" class="mtext-101 cl2 hov-cl1 trans-04">
-									<?php echo $row['title']; ?>
-								</a>
-							</h4>
-
-							<p class="stext-108 cl6">
-								<?php echo $row['short_detail']; ?>
-							</p>
+							<div class="info-item">
+								<i class="fa fa-phone"></i>
+								<span>+62 812-3456-7890</span>
+							</div>
+							<div class="info-item">
+								<i class="fa fa-envelope"></i>
+								<span>halo@rotisahabat.com</span>
+							</div>
 						</div>
 					</div>
-				</div>
-		<?php 
-				$count++;
-				if($count == 3)
-				{
-					break;
-				}
 
-	} ?>
+					<div class="col-md-7 p-0">
+						<div class="contact-form-wrap">
+							<h4>Kirim Pesan</h4>
+							<p>Isi formulir di bawah ini dan tim kami akan segera membalas pesanmu.</p>
+							
+							<form method="post" action="">
+								<div class="row">
+									<div class="col-sm-6">
+										<input class="input-custom" type="text" name="name" placeholder="Nama Lengkap" required>
+									</div>
+									<div class="col-sm-6">
+										<input class="input-custom" type="email" name="email" placeholder="Alamat Email" required>
+									</div>
+								</div>
+								
+								<textarea class="input-custom" name="msg" placeholder="Tulis pesanmu di sini..." required></textarea>
+								
+								<button type="submit" name="submit_msg" class="btn-kirim">
+									Kirim Pesan
+								</button>
+							</form>
+						</div>
+					</div>
+
+				</div>
 			</div>
 		</div>
-
-		<!-- Load more -->
-			<div class="flex-c-m flex-w w-full p-t-45">
-				<a href="blog.php" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-					Load More Blogs
-				</a>
-			</div>
 	</section>
 
 
