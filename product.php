@@ -29,6 +29,64 @@ $start = ($page_no-1)*$limit;
 $previous = $page_no-1;
 $next = $page_no+1;
 
+// --- KODE PROSES TAMBAH KERANJANG ---
+if (isset($_POST['cart_submit'])) {
+    // Mengecek apakah pembeli sudah login
+    if(isset($_SESSION['login'])) {
+        $user_id = $_SESSION['login'];
+        $cart_id = $_POST['cart_id'];
+        $product = $_POST['num_product'];
+        $size_p = $_POST['size_select'];
+        $color_p = $_POST['color_select'];
+
+        if($product > 0) {
+            // Ambil detail roti dari database
+            $sql_select = "select * from `product` where `id`='$cart_id'";
+            $data_p = mysqli_query($conn, $sql_select);
+            $row_p = mysqli_fetch_assoc($data_p);
+
+            // Cek apakah roti ini sudah ada di keranjang user
+            $sql_select_c = "select * from `cart` where `product_id`='$cart_id' AND `user_id`='$user_id'";
+            $data_c = mysqli_query($conn, $sql_select_c);
+            $row_count = mysqli_num_rows($data_c);
+            $row_data = mysqli_fetch_assoc($data_c);
+
+            $product_id = $cart_id;
+            $name = $row_p['name'];
+            $price = $row_p['price'];
+            $num_product = $product;
+            $image = $row_p['image1'];
+            $size = $size_p;
+            $color = $color_p;
+
+            // Jika sudah ada, tambahkan jumlahnya. Jika belum, buat baru.
+            if($row_count > 0) {
+                $new_price = $price;
+                $new_num_product = $num_product + $row_data['num_product'];
+                $sql_update = "update `cart` set `price`='$new_price',`num_product`='$new_num_product' where `product_id`='$product_id' AND `user_id`='$user_id'";
+                mysqli_query($conn, $sql_update);
+            } else {
+                $sql_insert = "insert into `cart`(`user_id`,`product_id`,`name`,`price`,`num_product`,`image`,`size`,`color`)values('$user_id','$product_id','$name','$price','$num_product','$image','$size','$color')";
+                mysqli_query($conn, $sql_insert);
+            }
+            
+            // Tampilkan pesan sukses
+            echo "<script>
+                alert('Berhasil! Roti telah dimasukkan ke keranjang.'); 
+                window.location.href='product.php';
+            </script>";
+            exit(); // <--- KODE AJAIB INI YANG MEMBUAT LOADING JADI INSTAN
+        }
+    } else {
+        // Jika belum login, arahkan ke halaman login
+        echo "<script>
+            alert('Silakan login terlebih dahulu untuk memesan roti!'); 
+            window.location.href='login.php';
+        </script>";
+        exit(); // <--- Tambahkan di sini juga
+    }
+}
+// --- AKHIR KODE PROSES TAMBAH KERANJANG ---
 
 if(isset($_SESSION['short']))
 {
@@ -319,31 +377,26 @@ if(isset($_GET['search_product']))
 
 	<div id="all_product_page_change_data">
 		<div class="row isotope-grid" >
-
-			<?php while ($row = mysqli_fetch_assoc($data)) { ?>	
+			<?php while ($row = mysqli_fetch_assoc($data)) { ?> 
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
 					<div class="card-roti">
 						<div class="block2-pic hov-img0">
 							<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
 						</div>
 
-						<div class="p-t-14 p-b-10">
-							<span class="roti-title">
-								<?php echo $row['name']; ?>
-							</span>
+						<div class="p-t-14 p-b-10 text-center">
+						<span class="roti-title">
+							<?php echo $row['name']; ?>
+						</span>
 
-							<span class="roti-price">
-								Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
-							</span>
+						<span class="roti-price">
+							Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
+						</span>
 
-							<!-- Form Add to Cart Langsung -->
-							<!-- Pastikan action dikirim ke script proses keranjang. Jika logic cart_submit ada di index.php, gunakan action="" -->
-							<form method="post" action="product.php">
-								<!-- Menyimpan data roti yang dipilih secara tersembunyi -->
+						<div class="p-t-10 m-b-10">
+							<form method="post" action="">
 								<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
 								<input type="hidden" name="num_product" value="1">
-								
-								<!-- Karena toko roti biasanya tidak butuh ukuran baju (S/M/L), kita isi value default atau sembunyikan -->
 								<input type="hidden" name="size_select" value="Reguler">
 								<input type="hidden" name="color_select" value="Original">
 								
@@ -351,11 +404,12 @@ if(isset($_GET['search_product']))
 									+ Pesan
 								</button>
 							</form>
-
-							<?php if (isset($_GET['search_product'])) { ?>
-								<input type="hidden" name="search_txt" value="<?php echo $_GET['search_product']; ?>" id="srch_txt">
-							<?php } ?>
 						</div>
+
+						<?php if (isset($_GET['search_product'])) { ?>
+							<input type="hidden" name="search_txt" value="<?php echo $_GET['search_product']; ?>" id="srch_txt">
+						<?php } ?>
+					</div>
 					</div>
 				</div>
 			<?php } ?>

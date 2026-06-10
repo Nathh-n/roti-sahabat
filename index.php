@@ -15,6 +15,50 @@ $data_product_s = mysqli_query($conn,$sql_select_product_s);
 $sql_select_product_tr = "select * from `product` where `tag` like '%Top-rate%' AND `stock`='In Stock'";
 $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 
+if (isset($_POST['cart_submit'])) {
+    if(isset($_SESSION['login'])) {
+        $user_id = $_SESSION['login'];
+        $cart_id = $_POST['cart_id'];
+        $product = $_POST['num_product'];
+        $size_p = $_POST['size_select'];
+        $color_p = $_POST['color_select'];
+
+        if($product > 0) {
+            $sql_select = "select * from `product` where `id`='$cart_id'";
+            $data_p = mysqli_query($conn, $sql_select);
+            $row_p = mysqli_fetch_assoc($data_p);
+
+            $sql_select_c = "select * from `cart` where `product_id`='$cart_id' AND `user_id`='$user_id'";
+            $data_c = mysqli_query($conn, $sql_select_c);
+            $row_count = mysqli_num_rows($data_c);
+            $row_data = mysqli_fetch_assoc($data_c);
+
+            $product_id = $cart_id;
+            $name = $row_p['name'];
+            $price = $row_p['price'];
+            $num_product = $product;
+            $image = $row_p['image1'];
+            $size = $size_p;
+            $color = $color_p;
+
+            if($row_count > 0) {
+                $new_price = $price;
+                $new_num_product = $num_product + $row_data['num_product'];
+                $sql_update = "update `cart` set `price`='$new_price',`num_product`='$new_num_product' where `product_id`='$product_id' AND `user_id`='$user_id'";
+                mysqli_query($conn, $sql_update);
+            } else {
+                $sql_insert = "insert into `cart`(`user_id`,`product_id`,`name`,`price`,`num_product`,`image`,`size`,`color`)values('$user_id','$product_id','$name','$price','$num_product','$image','$size','$color')";
+                mysqli_query($conn, $sql_insert);
+            }
+            
+            echo "<script>alert('Berhasil! Roti telah dimasukkan ke keranjang.'); window.location.href='index.php';</script>";
+            exit();
+        }
+    } else {
+        echo "<script>alert('Silakan login terlebih dahulu untuk memesan roti!'); window.location.href='login.php';</script>";
+        exit();
+    }
+}
 ?>
 
 <?php
@@ -345,6 +389,88 @@ $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 			transform: translateY(-3px);
 			box-shadow: 0 10px 20px rgba(194, 24, 91, 0.3);
 		}
+
+		.roti-tabs {
+			border-bottom: none;
+			justify-content: center;
+			gap: 15px;
+			margin-bottom: 20px;
+		}
+		.roti-tabs .nav-link {
+			border: none !important;
+			background-color: #f0f0f0;
+			color: #555;
+			border-radius: 50px;
+			padding: 10px 30px;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+		.roti-tabs .nav-link.active {
+			background: linear-gradient(135deg, #c2185b, #800080);
+			color: white !important;
+			box-shadow: 0 5px 15px rgba(194, 24, 91, 0.4);
+		}
+		.card-roti {
+			border-radius: 20px;
+			overflow: hidden;
+			box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			background: #fff;
+			padding-bottom: 20px;
+			margin: 10px;
+			border: 1px solid #f9f9f9;
+		}
+		.card-roti:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 15px 35px rgba(128, 0, 128, 0.15);
+		}
+		.card-roti .block2-pic img {
+			height: 250px;
+			object-fit: cover;
+			width: 100%;
+		}
+		.roti-title {
+			font-family: 'Playfair Display', serif;
+			font-weight: 800;
+			font-size: 20px;
+			color: #2b003a;
+			text-align: center;
+			margin-top: 15px;
+			display: block;
+		}
+		.roti-price {
+			font-family: 'Poppins', sans-serif;
+			color: #c2185b;
+			font-weight: 700;
+			font-size: 18px;
+			text-align: center;
+			display: block;
+			margin-top: 5px;
+		}
+		.btn-pesan-roti {
+			display: block;
+			width: 80%;
+			margin: 15px auto 0;
+			text-align: center;
+			background: #c2185b;
+			color: white !important;
+			border-radius: 30px;
+			padding: 10px 0;
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			font-size: 14px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			transition: all 0.3s ease;
+			border: none;
+			cursor: pointer;
+		}
+		.btn-pesan-roti:hover {
+			background: #800080;
+			box-shadow: 0 5px 15px rgba(128,0,128,0.3);
+			transform: translateY(-2px);
+		}
 	</style>
 
 	<section class="hero-roti">
@@ -500,16 +626,16 @@ $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 											<div class="block2-pic hov-img0">
 												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
 											</div>
-											<div class="p-t-14 p-b-10">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
-													<?php echo $row['name']; ?>
-												</a>
-												<span class="roti-price">
-													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
-												</span>
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
-													Lihat Detail
-												</a>
+											<div class="p-t-14 p-b-10 text-center">
+												<span class="roti-title"><?php echo $row['name']; ?></span>
+												<span class="roti-price">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></span>
+												<form method="post" action="">
+													<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
+													<input type="hidden" name="num_product" value="1">
+													<input type="hidden" name="size_select" value="Reguler">
+													<input type="hidden" name="color_select" value="Original">
+													<button type="submit" name="cart_submit" class="btn-pesan-roti">+ Pesan</button>
+												</form>
 											</div>
 										</div>
 									</div>
@@ -527,16 +653,16 @@ $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 											<div class="block2-pic hov-img0">
 												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
 											</div>
-											<div class="p-t-14 p-b-10">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
-													<?php echo $row['name']; ?>
-												</a>
-												<span class="roti-price">
-													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
-												</span>
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
-													Lihat Detail
-												</a>
+											<div class="p-t-14 p-b-10 text-center">
+												<span class="roti-title"><?php echo $row['name']; ?></span>
+												<span class="roti-price">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></span>
+												<form method="post" action="">
+													<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
+													<input type="hidden" name="num_product" value="1">
+													<input type="hidden" name="size_select" value="Reguler">
+													<input type="hidden" name="color_select" value="Original">
+													<button type="submit" name="cart_submit" class="btn-pesan-roti">+ Pesan</button>
+												</form>
 											</div>
 										</div>
 									</div>
@@ -554,16 +680,16 @@ $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 											<div class="block2-pic hov-img0">
 												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
 											</div>
-											<div class="p-t-14 p-b-10">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
-													<?php echo $row['name']; ?>
-												</a>
-												<span class="roti-price">
-													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
-												</span>
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
-													Lihat Detail
-												</a>
+											<div class="p-t-14 p-b-10 text-center">
+												<span class="roti-title"><?php echo $row['name']; ?></span>
+												<span class="roti-price">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></span>
+												<form method="post" action="">
+													<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
+													<input type="hidden" name="num_product" value="1">
+													<input type="hidden" name="size_select" value="Reguler">
+													<input type="hidden" name="color_select" value="Original">
+													<button type="submit" name="cart_submit" class="btn-pesan-roti">+ Pesan</button>
+												</form>
 											</div>
 										</div>
 									</div>
@@ -581,16 +707,16 @@ $data_product_tr = mysqli_query($conn,$sql_select_product_tr);
 											<div class="block2-pic hov-img0">
 												<img src="admin/image/<?php echo $row['image1']; ?>" alt="IMG-PRODUCT">
 											</div>
-											<div class="p-t-14 p-b-10">
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="roti-title hov-cl1 trans-04">
-													<?php echo $row['name']; ?>
-												</a>
-												<span class="roti-price">
-													Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
-												</span>
-												<a href="product-detail.php?detail_id=<?php echo $row['id']; ?>" class="btn-detail-roti">
-													Lihat Detail
-												</a>
+											<div class="p-t-14 p-b-10 text-center">
+												<span class="roti-title"><?php echo $row['name']; ?></span>
+												<span class="roti-price">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></span>
+												<form method="post" action="">
+													<input type="hidden" name="cart_id" value="<?php echo $row['id']; ?>">
+													<input type="hidden" name="num_product" value="1">
+													<input type="hidden" name="size_select" value="Reguler">
+													<input type="hidden" name="color_select" value="Original">
+													<button type="submit" name="cart_submit" class="btn-pesan-roti">+ Pesan</button>
+												</form>
 											</div>
 										</div>
 									</div>

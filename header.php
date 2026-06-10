@@ -1,5 +1,36 @@
 <?php include_once 'site_connection.php';
 
+// --- KODE PROSES PLUS MINUS HAPUS KERANJANG SIDEBAR ---
+if(isset($_GET['cart_action']) && isset($_GET['c_id']) && isset($_SESSION['login'])) {
+    $c_id = $_GET['c_id'];
+    $u_id = $_SESSION['login'];
+    $action = $_GET['cart_action'];
+
+    $cek_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE `product_id`='$c_id' AND `user_id`='$u_id'");
+    if(mysqli_num_rows($cek_cart) > 0) {
+        $row_c = mysqli_fetch_assoc($cek_cart);
+        $qty_now = $row_c['num_product'];
+
+        if($action == 'add') {
+            $new_qty = $qty_now + 1;
+            mysqli_query($conn, "UPDATE `cart` SET `num_product`='$new_qty' WHERE `product_id`='$c_id' AND `user_id`='$u_id'");
+        } elseif($action == 'min') {
+            $new_qty = $qty_now - 1;
+            if($new_qty > 0) {
+                mysqli_query($conn, "UPDATE `cart` SET `num_product`='$new_qty' WHERE `product_id`='$c_id' AND `user_id`='$u_id'");
+            } else {
+                mysqli_query($conn, "DELETE FROM `cart` WHERE `product_id`='$c_id' AND `user_id`='$u_id'");
+            }
+        } elseif($action == 'del') {
+            mysqli_query($conn, "DELETE FROM `cart` WHERE `product_id`='$c_id' AND `user_id`='$u_id'");
+        }
+    }
+    // Refresh otomatis ke halaman saat ini
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    exit;
+}
+// --- AKHIR KODE PROSES KERANJANG ---
+
 if(isset($_SESSION['login']))
 {
 $login_id = $_SESSION['login'];
@@ -21,6 +52,8 @@ while($row_total = mysqli_fetch_assoc($data_total))
 
 $data_count = mysqli_num_rows($data_total);
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -173,45 +206,83 @@ $data_count = mysqli_num_rows($data_total);
 
 	<div class="wrap-header-cart js-panel-cart">
 		<div class="s-full js-hide-cart"></div>
-		<div class="header-cart flex-col-l p-l-65 p-r-25">
-			<div class="header-cart-title flex-w flex-sb-m w-full p-b-8">
-				<span class="mtext-103 cl2">
-					Your Cart
+		
+		<div class="header-cart flex-col-l p-l-40 p-r-40" style="width: 420px; max-width: 100%; box-shadow: -5px 0 20px rgba(0,0,0,0.1);">
+			
+			<div class="header-cart-title flex-w flex-sb-m w-full p-b-20 p-t-30" style="border-bottom: 2px solid #f9f9f9;">
+				<span class="mtext-103" style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 24px; color: #2b003a;">
+					Keranjang Roti
 				</span>
 				<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
 					<i class="zmdi zmdi-close"></i>
 				</div>
 			</div>
 			
-			<div class="header-cart-content flex-w js-pscroll">
+			<div class="header-cart-content flex-w js-pscroll w-full p-t-20">
 				<ul class="header-cart-wrapitem w-full">
-				<?php if (isset($_SESSION['login'])) {
-				while($row = mysqli_fetch_assoc($data_cart)) { ?>
-					<li class="header-cart-item flex-w flex-t m-b-12">
-						<div class="header-cart-item-img">
-							<img src="admin/image/<?php echo $row['image']; ?>\" alt=\"IMG\"> 
-						</div>
-						<div class="header-cart-item-txt p-t-8">
-							<a href="product-detail.php?detail_id=<?php echo $row['product_id']; ?>" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-								<?php echo $row['name']; ?>
-							</a>
-							<span class="header-cart-item-info">
-								<?php echo $row['num_product']; ?> x Rs.<?php echo $row['price']; ?>
-							</span>
-						</div>
-					</li>
-				<?php } } ?>
+				
+				<?php 
+				if (isset($_SESSION['login'])) {
+					if (mysqli_num_rows($data_cart) > 0) {
+						while($row = mysqli_fetch_assoc($data_cart)) { ?>
+						
+						<li class="header-cart-item m-b-25" style="display: flex; flex-wrap: nowrap; align-items: center; border-bottom: 1px dashed #eee; padding-bottom: 15px;">
+							
+							<div style="flex-shrink: 0; width: 80px; height: 80px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-right: 15px;">
+								<img src="admin/image/<?php echo $row['image']; ?>" alt="IMG" style="width: 100%; height: 100%; object-fit: cover;">
+							</div>
+
+							<div style="flex-grow: 1; width: calc(100% - 95px);">
+								<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+									<a href="#" class="header-cart-item-name hov-cl1 trans-04" style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 16px; color: #2b003a; line-height: 1.2; padding-right: 10px; width: auto;">
+										<?php echo $row['name']; ?>
+									</a>
+									
+									<a href="?cart_action=del&c_id=<?php echo $row['product_id']; ?>" class="pointer hov-cl1 trans-04" style="color: #ff4d4d; font-size: 20px; line-height: 1;" title="Hapus">
+										<i class="zmdi zmdi-delete"></i>
+									</a>
+								</div>
+
+								<div style="color: #c2185b; font-weight: 600; font-size: 15px; margin-top: 5px;">
+									Rp <?php echo number_format($row['price'], 0, ',', '.'); ?>
+								</div>
+
+								<div style="display: flex; align-items: center; margin-top: 10px;">
+									<a href="?cart_action=min&c_id=<?php echo $row['product_id']; ?>" style="display: flex; justify-content: center; align-items: center; width: 30px; height: 30px; border-radius: 8px; background-color: #f9f9f9; color: #2b003a; border: 1px solid #ddd; text-decoration: none; transition: 0.3s;" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f9f9f9'">
+										<i class="fs-14 zmdi zmdi-minus"></i>
+									</a>
+									
+									<span style="font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px; color: #333; width: 35px; text-align: center;">
+										<?php echo $row['num_product']; ?>
+									</span>
+									
+									<a href="?cart_action=add&c_id=<?php echo $row['product_id']; ?>" style="display: flex; justify-content: center; align-items: center; width: 30px; height: 30px; border-radius: 8px; background-color: #f9f9f9; color: #2b003a; border: 1px solid #ddd; text-decoration: none; transition: 0.3s;" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='#f9f9f9'">
+										<i class="fs-14 zmdi zmdi-plus"></i>
+									</a>
+								</div>
+							</div>
+						</li>
+
+						<?php } 
+					} else {
+						// Jika Keranjang Kosong
+						echo '<div class="flex-col-c-m p-t-50 p-b-50 w-full"><i class="zmdi zmdi-shopping-cart" style="font-size: 60px; color: #ddd; margin-bottom: 15px;"></i><p style="font-family:\'Poppins\', sans-serif; color: #888; text-align: center;">Keranjang Sahabat masih kosong.</p></div>';
+					}
+				} else {
+					// Jika Belum Login
+					echo '<div class="flex-col-c-m p-t-50 p-b-50 w-full"><i class="zmdi zmdi-account" style="font-size: 60px; color: #ddd; margin-bottom: 15px;"></i><p style="font-family:\'Poppins\', sans-serif; color: #888; text-align: center;">Silakan login terlebih dahulu.</p></div>';
+				}
+				?>
 				</ul>
-				<div class="w-full">
-					<div class="header-cart-total w-full p-tb-40">
-						Total: Rs.<?php echo isset($total_price) ? $total_price : '0'; ?>
+				
+				<div class="w-full p-b-30">
+					<div class="header-cart-total w-full p-tb-20" style="font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: #2b003a; border-top: 2px solid #f9f9f9; text-align: right;">
+						Total: Rp <?php echo isset($total_price) ? number_format($total_price, 0, ',', '.') : '0'; ?>
 					</div>
+
 					<div class="header-cart-buttons flex-w w-full">
-						<a href="shoping-cart.php" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-							View Cart
-						</a>
-						<a href="shoping-cart.php" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-							Check Out
+						<a href="shoping-cart.php" class="flex-c-m stext-101 cl0 size-107 trans-04 w-full" style="background: linear-gradient(135deg, #c2185b, #800080); border-radius: 30px; font-family: 'Poppins', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(194, 24, 91, 0.3);">
+							Checkout Sekarang
 						</a>
 					</div>
 				</div>

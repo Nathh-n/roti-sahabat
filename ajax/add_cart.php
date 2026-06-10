@@ -2,47 +2,47 @@
 
 include_once '../site_connection.php';
 
-// if (isset($_POST['num_product']))
-// {
-// 	$cart_id = $_POST['cart_id'];
-// 	$product = $_POST['num_product'];
+ if (isset($_POST['num_product']))
+ {
+ 	$cart_id = $_POST['cart_id'];
+ 	$product = $_POST['num_product'];
 
-// 	if($product>0)
-// 	{
-// 		$sql_select = "select * from `product` where `id`='$cart_id'";
-// 		$data = mysqli_query($conn,$sql_select);
-// 		$row = mysqli_fetch_assoc($data);
+ 	if($product>0)
+ 	{
+ 		$sql_select = "select * from `product` where `id`='$cart_id'";
+ 		$data = mysqli_query($conn,$sql_select);
+ 		$row = mysqli_fetch_assoc($data);
 
-// 		$sql_select_c = "select * from `cart` where `product_id`='$cart_id'";
-// 		$data_c = mysqli_query($conn,$sql_select_c);
-// 		$row_count = mysqli_num_rows($data_c);
-// 		$row_data = mysqli_fetch_assoc($data_c);
+ 		$sql_select_c = "select * from `cart` where `product_id`='$cart_id'";
+ 		$data_c = mysqli_query($conn,$sql_select_c);
+ 		$row_count = mysqli_num_rows($data_c);
+ 		$row_data = mysqli_fetch_assoc($data_c);
 
-// 		$product_id = $cart_id;
-// 		$name = $row['name'];
-// 		$price = $row['price'];
-// 		$num_product = $product;
-// 		$image = $row['image1'];
+ 		$product_id = $cart_id;
+ 		$name = $row['name'];
+ 		$price = $row['price'];
+ 		$num_product = $product;
+ 		$image = $row['image1'];
 
-// 		if($row_count>0)
-// 		{
-// 			$new_price = $price;
-// 			$new_num_product = $num_product + $row_data['num_product'];
+ 		if($row_count>0)
+ 		{
+ 			$new_price = $price;
+ 			$new_num_product = $num_product + $row_data['num_product'];
 
-// 			$sql_update = "update `cart` set `price`='$new_price',`num_product`='$new_num_product' where `product_id`='$product_id'";
-// 			mysqli_query($conn,$sql_update);
+ 			$sql_update = "update `cart` set `price`='$new_price',`num_product`='$new_num_product' where `product_id`='$product_id'";
+ 			mysqli_query($conn,$sql_update);
 
-// 			header('location:shoping-cart.php');
-// 		}
-// 		else
-// 		{
-// 			$sql_insert = "insert into `cart`(`product_id`,`name`,`price`,`num_product`,`image`)values('$product_id','$name','$price','$num_product','$image')";
-// 			mysqli_query($conn,$sql_insert);
+ 			header('location:shoping-cart.php');
+ 		}
+ 		else
+ 		{
+ 			$sql_insert = "insert into `cart`(`product_id`,`name`,`price`,`num_product`,`image`)values('$product_id','$name','$price','$num_product','$image')";
+ 			mysqli_query($conn,$sql_insert);
 
-// 			header('location:shoping-cart.php');
-// 		}
-// 	}
-// }
+ 			header('location:shoping-cart.php');
+ 		}
+ 	}
+ }
 
 if (isset($_GET['d_id']))
 {
@@ -229,7 +229,7 @@ while($row_total = mysqli_fetch_assoc($data_total))
 
 				var id = $(this).attr('attr_id');
 
-				// alert(id);
+				 alert(id);
 				$.ajax({
 
 					type: "get",
