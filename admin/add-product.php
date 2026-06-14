@@ -84,93 +84,73 @@ if (isset($_POST['submit_product']))
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Category of Product</label>
+                    <label>Kategori Roti</label>
                     <select class="form-control" name="category" required>
-                      <option selected disabled>-Select Category of Product-</option>
-                      <option>Women</option>
-                      <option>Men</option>
-                      <option>Accessories</option>
+                      <option selected disabled>- Pilih Kategori -</option>
+                      <option value="roti-manis">Roti Manis</option>
+                      <option value="roti-gurih">Roti Gurih</option>
+                      <option value="kue-pastry">Kue & Pastry</option>
                     </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputFile">Tag of Product (As per the offer)</label>
-                      <div>
-                        <input type="checkbox" name="tag[]" value="Best-seller"> Best-seller <br>
-                        <input type="checkbox" name="tag[]" value="Featured"> Featured <br>
-                        <input type="checkbox" name="tag[]" value="Sale"> Sale <br>
-                        <input type="checkbox" name="tag[]" value="Top-rate"> Top-rate <br>
-                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Type of Product</label>
+                    <label>Tag (Posisi Tampil di Beranda)</label><br>
+                    <input type="checkbox" name="tag[]" value="Best-seller"> Terlaris (Best Seller)<br>
+                    <input type="checkbox" name="tag[]" value="Featured"> Rekomendasi (Featured)<br>
+                    <input type="checkbox" name="tag[]" value="Sale"> Promo Spesial (Sale)<br>
+                    <input type="checkbox" name="tag[]" value="Top-rate"> Rating Tertinggi (Top Rate)
+                  </div>
+
+                  <div class="form-group">
+                    <label>Tipe (Metode Masak)</label>
                     <select class="form-control" name="type" required>
-                      <option selected disabled>-Select Type of Product-</option>
-                      <option>Shirt</option>
-                      <option>T-shirt</option>
-                      <option>Jeans</option>
-                      <option>Cotton-pent</option>
-                      <option>Top</option>
-                      <option>Kurti</option>
-                      <option>Sarwar</option>
-                      <option>Capri</option>
-                      <option>Belt</option>
-                      <option>Gogles</option>
-                      <option>Purse</option>
-                      <option>Cap</option>
-                      <option>Shoes</option>
-                      <option>Socks</option>
-                      <option>Watch</option>
-                      <option>Bag</option>
+                      <option selected disabled>- Pilih Tipe -</option>
+                      <option value="Panggang">Panggang (Oven)</option>
+                      <option value="Goreng">Goreng</option>
+                      <option value="Kukus">Kukus</option>
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Select Avilable Size of Product</label>
-                      <div>
-                        <input type="checkbox" name="size[]" value="S - Small"> S - Small <br>
-                        <input type="checkbox" name="size[]" value="M - Medium"> M - Medium <br>
-                        <input type="checkbox" name="size[]" value="L - Large"> L - Large <br>
-                        <input type="checkbox" name="size[]" value="XL - Extra Large"> XL - Extra Large <br>
-                        <input type="checkbox" name="size[]" value="XXL - Extra Extra Large"> XXL - Extra Extra Large <br>
-                     </div>
+                    <label>Ukuran Porsi (Size)</label><br>
+                    <input type="checkbox" name="size[]" value="Mini"> Mini<br>
+                    <input type="checkbox" name="size[]" value="Reguler"> Reguler<br>
+                    <input type="checkbox" name="size[]" value="Besar"> Besar<br>
+                    <input type="checkbox" name="size[]" value="Loyang/Box"> Loyang / Box
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Select Available Color of Product</label>
-                      <div>
-                        <input type="checkbox" name="color[]" value="Black"> Black <br>
-                        <input type="checkbox" name="color[]" value="Blue"> Blue <br>
-                        <input type="checkbox" name="color[]" value="Gray"> Gray <br>
-                        <input type="checkbox" name="color[]" value="Green"> Green <br>
-                        <input type="checkbox" name="color[]" value="Red"> Red <br>
-                        <input type="checkbox" name="color[]" value="White"> White <br>
-                     </div>
+                    <label>Varian Rasa Utama (Color)</label><br>
+                    <input type="checkbox" name="color[]" value="Original"> Original<br>
+                    <input type="checkbox" name="color[]" value="Coklat"> Coklat<br>
+                    <input type="checkbox" name="color[]" value="Keju"> Keju<br>
+                    <input type="checkbox" name="color[]" value="Daging/Abon"> Daging / Abon<br>
+                    <input type="checkbox" name="color[]" value="Buah"> Buah-buahan
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">One Line Title of Product</label>
-                    <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter One Line Title of Product" name="one_line_title" maxlength="100" required></textarea>
+                    <label>Judul Singkat Roti</label>
+                    <textarea type="text" class="form-control" placeholder="Masukkan Judul Singkat Roti" name="one_line_title" maxlength="100" required></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Description of Product</label>
-                    <textarea rows="10" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Description of Product" name="description" maxlength="500" required></textarea>
+                    <label>Deskripsi Lengkap Roti</label>
+                    <textarea rows="10" type="text" class="form-control" placeholder="Masukkan Deskripsi Roti" name="description" maxlength="500" required></textarea>
                   </div>
 
                    <div class="form-group">
-                    <label for="exampleInputPassword1">Weight of Product (in KG)</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Weight of Product" name="weight" maxlength="10" required>
+                    <label>Berat Roti (Gram/KG)</label>
+                    <input type="text" class="form-control" placeholder="Misal: 500 gram" name="weight" maxlength="10" required>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Dimensions of Product (in CM)</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Dimensions of Product" name="dimension" maxlength="20" required>
+                    <label>Dimensi/Ukuran Roti (CM)</label>
+                    <input type="text" class="form-control" placeholder="Misal: 20x10x5 cm" name="dimension" maxlength="20" required>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Type of Material used in Product</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter type of materail used in product" name="material" maxlength="50" required>
+                    <label>Komposisi Utama (Material)</label>
+                    <input type="text" class="form-control" placeholder="Misal: Tepung Terigu, Mentega, Coklat" name="material" maxlength="50" required>
                   </div>
 
                   <div class="form-group">
@@ -178,26 +158,6 @@ if (isset($_POST['submit_product']))
                     <div class="input-group">
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" id="exampleInputFile" name="image1" required>
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label>
-                      </div>
-                    </div> 
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputFile">Image 2</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image2" required>
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label>
-                      </div>
-                    </div> 
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputFile">Image 3</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image3" required>
                         <label class="custom-file-label" for="exampleInputFile">Choose image</label>
                       </div>
                     </div> 
