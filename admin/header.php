@@ -346,62 +346,17 @@ $diff = $old_datetime->diff(new DateTime($current_time));
 <!-- Dashboard -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+          
           <li class="nav-item <?php if($url=="/ecommerce_website/admin/dashboard.php") { echo "menu-open"; } ?>">
             <a href="dashboard.php" class="nav-link <?php if($url=="/ecommerce_website/admin/dashboard.php") { echo "active"; } ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <!-- <i class="right fas fa-angle-left"></i> -->
-              </p>
+              <p>Dashboard</p>
             </a>
-            <!-- <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="dashboard.php" class="nav-link <?php if($url=="/yom/admin/dashboard.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-            </ul> -->
           </li>
-        </ul>
 
-
-<!-- Slider -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php if($url=="/ecommerce_website/admin/add-slider.php" || $url=="/ecommerce_website/admin/view-slider.php") { echo "menu-open"; } ?>">
-            <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/add-slider.php" || $url=="/ecommerce_website/admin/view-slider.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Slider
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="add-slider.php" class="nav-link <?php if($url=="/ecommerce_website/admin/add-slider.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Slider</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="view-slider.php" class="nav-link <?php if($url=="/ecommerce_website/admin/view-slider.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View/Manage Slider</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-<!-- Services -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item <?php if($url=="/ecommerce_website/admin/add-product.php" || $url=="/ecommerce_website/admin/view-product.php") { echo "menu-open"; } ?>">
             <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/add-product.php" || $url=="/ecommerce_website/admin/view-product.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-bread-slice"></i>
               <p>
                 Products
                 <i class="right fas fa-angle-left"></i>
@@ -414,8 +369,6 @@ $diff = $old_datetime->diff(new DateTime($current_time));
                   <p>Add Product</p>
                 </a>
               </li>
-            </ul>
-            <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="view-product.php" class="nav-link <?php if($url=="/ecommerce_website/admin/view-product.php") { echo "active"; } ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -424,93 +377,15 @@ $diff = $old_datetime->diff(new DateTime($current_time));
               </li>
             </ul>
           </li>
-        </ul>
-        
 
-<!-- Blog -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php if($url=="/ecommerce_website/admin/add-blog.php" || $url=="/ecommerce_website/admin/view-blog.php") { echo "menu-open"; } ?>">
-            <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/add-blog.php" || $url=="/ecommerce_website/admin/view-blog.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Blog
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="add-blog.php" class="nav-link <?php if($url=="/ecommerce_website/admin/add-blog.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Blog</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="view-blog.php" class="nav-link <?php if($url=="/ecommerce_website/admin/view-blog.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View/Manage Blog</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-
-<!-- About -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php if($url=="/ecommerce_website/admin/manage-about.php") { echo "menu-open"; } ?>">
-            <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/manage-about.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                About
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="manage-about.php" class="nav-link <?php if($url=="/ecommerce_website/admin/manage-about.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manage About-Us</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-<!-- Contact Us -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item <?php if($url=="/ecommerce_website/admin/contacted-us.php") { echo "menu-open"; } ?>">
-            <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/contacted-us.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Data of Contacted-Us
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-           
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="contacted-us.php" class="nav-link <?php if($url=="/ecommerce_website/admin/contacted-us.php") { echo "active"; } ?>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>View Contacted-Us Data</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-<!-- Contact Us -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item <?php if($url=="/ecommerce_website/admin/view-received-order.php" || $url=="/ecommerce_website/admin/view-all-orders.php") { echo "menu-open"; } ?>">
             <a href="#" class="nav-link <?php if($url=="/ecommerce_website/admin/view-received-order.php" || $url=="/ecommerce_website/admin/view-all-orders.php") { echo "active"; } ?>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-shopping-cart"></i>
               <p>
                 Orders
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-           
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="view-received-order.php" class="nav-link <?php if($url=="/ecommerce_website/admin/view-received-order.php") { echo "active"; } ?>">
@@ -518,8 +393,6 @@ $diff = $old_datetime->diff(new DateTime($current_time));
                   <p>New Received Orders</p>
                 </a>
               </li>
-            </ul>
-            <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="view-all-orders.php" class="nav-link <?php if($url=="/ecommerce_website/admin/view-all-orders.php") { echo "active"; } ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -528,26 +401,21 @@ $diff = $old_datetime->diff(new DateTime($current_time));
               </li>
             </ul>
           </li>
-        </ul>
 
-
-
-
-
-
-<!-- Log-out -->
-         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="log-out.php" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Log-out
-                <!-- <i class="right fas fa-angle-left"></i> -->
-              </p>
+          <li class="nav-item <?php if($url=="/ecommerce_website/admin/manage-about.php") { echo "menu-open"; } ?>">
+            <a href="manage-about.php" class="nav-link <?php if($url=="/ecommerce_website/admin/manage-about.php") { echo "active"; } ?>">
+              <i class="nav-icon fas fa-info-circle"></i>
+              <p>About</p>
             </a>
           </li>
+
+          <li class="nav-item" style="margin-top: 40px;">
+            <a href="log-out.php" class="nav-link" style="background-color: #dc3545; color: white; border-radius: 5px;">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Log-out</p>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
