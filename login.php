@@ -1,158 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-	<title>Home</title>
+	<title>Masuk - Roti Sahabat</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
-<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon-roti.png"/>
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/slick/slick.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/MagnificPopup/magnific-popup.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/maina.css">
-<!--===============================================================================================-->
 
 	<style>
-		.login_or{
-			text-align: center;
-			margin-bottom: 50px;
+		body {
+			background-color: #fffafb; /* Warna latar pink sangat lembut */
+			font-family: 'Poppins', sans-serif;
 		}
-		.register{
-			font-family: Poppins-Medium;
-			color: #333;
-			background-color: white;
-			font-size: 17px;
-			font-weight: 500;
-		}
-		.login_flex{
-			margin: auto;
-			font-family: Poppins-Medium;
+		.login-wrap {
+			min-height: 100vh;
 			display: flex;
 			align-items: center;
-			gap: 2px;
 			justify-content: center;
+			padding: 20px;
+			position: relative;
 		}
-		.logo_login{
-			margin: auto;
-			margin-top: 90px;
-			margin-bottom: 80px;
-			width: 160px;
-		}
-		.logo_login img{
-			width: 100%;
-		}
-		.button_login_flex{
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 50px;
-		}
-		.forgot{
-			font-family: Poppins-Medium;
-			color: #333;
-			background-color: white;
-			font-size: 14px;
-			font-weight: 500;
-		}
-		.login_text h4{
-			font-family: Poppins-Medium;
-			font-size: 13.5px;
+		.back-home {
+			position: absolute;
+			top: 30px;
+			left: 30px;
 			font-weight: 600;
-			text-align: center;
+			color: #2b003a;
+			text-decoration: none;
+			font-size: 15px;
+			transition: 0.3s;
 		}
-		.login_text p{
-			font-family: Poppins-Medium;
-			font-size: 11.5px;
-			font-weight: 400;
-			font-style: italic;
+		.back-home:hover {
+			color: #c2185b;
+			text-decoration: none;
+		}
+		.login-card {
+			background: #fff;
+			width: 100%;
+			max-width: 420px;
+			border-radius: 20px;
+			box-shadow: 0 15px 40px rgba(128, 0, 128, 0.08);
+			padding: 50px 40px;
 			text-align: center;
+			border-top: 5px solid #c2185b;
+		}
+		.login-logo {
+			font-family: 'Playfair Display', serif;
+			font-size: 32px;
+			font-weight: 800;
+			color: #2b003a;
+			margin-bottom: 5px;
+		}
+		.login-subtitle {
+			font-size: 13px;
+			color: #888;
+			margin-bottom: 40px;
+		}
+		.input-group-custom {
+			margin-bottom: 20px;
+			text-align: left;
+			position: relative;
+		}
+		.input-group-custom label {
+			font-size: 13px;
+			font-weight: 600;
+			color: #333;
+			display: block;
+			margin-bottom: 8px;
+		}
+		.input-group-custom i {
+			position: absolute;
+			bottom: 16px;
+			left: 15px;
+			color: #aaa;
+		}
+		.input-custom {
+			width: 100%;
+			height: 48px;
+			border: 2px solid #eee;
+			border-radius: 10px;
+			padding: 0 20px 0 40px; /* Jarak untuk icon */
+			font-size: 14px;
+			transition: all 0.3s;
+			background: #fcfcfc;
+		}
+		.input-custom:focus {
+			border-color: #c2185b;
+			background: #fff;
+			outline: none;
+			box-shadow: 0 0 10px rgba(194, 24, 91, 0.1);
+		}
+		.forgot-link {
+			display: block;
+			text-align: right;
+			font-size: 12px;
+			color: #c2185b;
+			font-weight: 500;
+			text-decoration: none;
+			margin-top: -10px;
+			margin-bottom: 25px;
+			transition: 0.3s;
+		}
+		.forgot-link:hover {
+			color: #800080;
+			text-decoration: none;
+		}
+		.btn-login {
+			width: 100%;
+			height: 50px;
+			background: linear-gradient(135deg, #c2185b, #800080);
+			color: white;
+			border: none;
+			border-radius: 10px;
+			font-weight: 600;
+			font-size: 15px;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			cursor: pointer;
+			transition: all 0.3s;
+			box-shadow: 0 5px 15px rgba(194, 24, 91, 0.3);
+		}
+		.btn-login:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(194, 24, 91, 0.4);
+		}
+		.login-divider {
+			display: flex;
+			align-items: center;
+			text-align: center;
+			margin: 30px 0;
+			color: #aaa;
+			font-size: 12px;
+		}
+		.login-divider::before, .login-divider::after {
+			content: '';
+			flex: 1;
+			border-bottom: 1px dashed #ddd;
+		}
+		.login-divider:not(:empty)::before { margin-right: .5em; }
+		.login-divider:not(:empty)::after { margin-left: .5em; }
+		.register-link {
+			font-size: 13px;
+			color: #555;
+		}
+		.register-link a {
+			color: #800080;
+			font-weight: 700;
+			text-decoration: none;
+			transition: 0.3s;
+		}
+		.register-link a:hover {
+			color: #c2185b;
+			text-decoration: none;
 		}
 	</style>
 </head>
+<body>
 
-<!-- breadcrumb -->
-	<div class="container">
-		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-			<a href="index.php" class="logo_login">
-				<img src="images/icons/logo-01.png" alt="IMG-LOGO">
-			</a>
-		</div>
-	
+	<div class="login-wrap">
+		<a href="index.php" class="back-home">
+			<i class="fa fa-arrow-left"></i> Kembali ke Toko
+		</a>
 
-	<div class="login_text">
-		<h4 class="p-b-15 ltext-108 cl2 trans-04">
-			LOGIN / REGISTER
-		</h4>
+		<div class="login-card">
+			<div class="login-logo">Roti Sahabat</div>
+			<div class="login-subtitle">Masuk untuk melanjutkan pesananmu</div>
 
-		<p class="stext-117 cl6">
-			Enjoy a personalised shopping experience
-		</p>
-	</div>					
-								
-
-	<!-- Shoping Cart -->
-<div id="new_number_of_product">
-	<div class="bg0 p-t-50">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-5 col-md-6 col-sm-10 m-lr-auto">
-							
-					<form method="post" class="w-full" id="review_submit">
-
-						<div class="col-12 p-b-5">
-							<label class="stext-102 cl3" for="name">User ID</label>
-							<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="user_id">
-						</div>
-
-						<div class="col-12 p-b-5">
-							<label class="stext-102 cl3" for="email">Password</label>
-							<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="password" name="password">
-						</div>
-											
-						<br>
-
-						<div class="col-sm-12 p-b-5 button_login_flex">
-							<input type="submit" name="login" value="Login" class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
-							<a href="#" class="forgot m-b-5">Forgot Password?</a>
-						</div>
-
-						<label class="stext-102 cl3 login_or" for="email">--- OR ----</label>
-						
-						<div class="login_flex">
-							<small style="font-size: 13px">New to CozaStore ? </small>
-							<a href="register.php" class="flex-c-m cl0 size-112 bg7 bor11 p-lr-15 trans-04 m-b-2 register" name="review_submit" id="review_count">Create an account</a> 
-						</div>
-					</form>
-
+			<form method="post">
+				<div class="input-group-custom">
+					<label for="user_id">Email / User ID</label>
+					<i class="fa fa-user"></i>
+					<input class="input-custom" id="user_id" type="text" name="user_id" placeholder="Masukkan ID kamu" required>
 				</div>
-			</div>
+
+				<div class="input-group-custom">
+					<label for="password">Kata Sandi</label>
+					<i class="fa fa-lock"></i>
+					<input class="input-custom" id="password" type="password" name="password" placeholder="Masukkan kata sandi" required>
+				</div>
+				
+				<a href="#" class="forgot-link">Lupa Kata Sandi?</a>
+
+				<button type="submit" name="login" class="btn-login">
+					Masuk
+				</button>
+
+				<div class="login-divider">ATAU</div>
+				
+				<div class="register-link">
+					Belum punya akun? <a href="register.php">Daftar Sekarang</a>
+				</div>
+			</form>
 		</div>
 	</div>
-</div>
-</div>
 
-
-	<?php include_once 'scripts.php'; ?>
+</body>
+</html>
