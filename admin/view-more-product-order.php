@@ -7,140 +7,132 @@ $data = mysqli_query($conn,$sql_select);
 $row = mysqli_fetch_assoc($data);
 
 ?>
-
   
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Details of Product to Deliver</h1>
+            <h1>Detail Pesanan Pelanggan</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Detail Pesanan</li>
             </ol>
           </div>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
+      </div></section>
 
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <!-- left column -->
-          <div class="col-md-6">
-            <!-- general form elements -->
-            <div class="card card-primary">
+          <div class="col-md-8">
+            <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Details of Product to Deliver</h3>
+                <h3 class="card-title">Informasi Lengkap Pesanan</h3>
               </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <table id="example2" class="table table-bordered">
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-striped">
                   
                   <tr>
-                    <th>Current Delivery Status</th>
-                    <td><?php echo $row['status']; ?></td>
+                    <th style="width: 35%;">Status Pesanan Saat Ini</th>
+                    <td>
+                        <?php 
+                        if($row['status'] == 'Pending') {
+                            echo '<span class="badge badge-warning" style="font-size: 14px;"><i class="fa fa-clock-o"></i> Menunggu / Diproses</span>';
+                        } elseif($row['status'] == 'Delivered') {
+                            echo '<span class="badge badge-success" style="font-size: 14px;"><i class="fa fa-check"></i> Selesai / Terkirim</span>';
+                        } else {
+                            echo '<span class="badge badge-danger" style="font-size: 14px;"><i class="fa fa-times"></i> Dibatalkan ('.$row['status'].')</span>';
+                        }
+                        ?>
+                    </td>
                   </tr>
                   <tr>
-                    <th>Product ID</th>
+                    <th>ID Produk / Roti</th>
                     <td><?php echo $row['product_id']; ?></td>
                   </tr>
                   <tr>
-                    <th>Date & Time of Order</th>
-                    <td><?php echo $row['date_time']; ?></td>
+                    <th>Tanggal & Waktu Pemesanan</th>
+                    <td><?php echo date('d/m/Y H:i', strtotime($row['date_time'])); ?></td>
                   </tr>
                   <tr>
-                    <th>Name of Product</th>
-                    <td><?php echo $row['name']; ?></td>
+                    <th>Nama Menu / Roti</th>
+                    <td style="font-weight: bold; color: #2b003a;"><?php echo $row['name']; ?></td>
                   </tr>
                   <tr>
-                    <th>Price of Product per Pic</th>
-                    <td>Rs.<?php echo $row['price']; ?></td>
+                    <th>Harga Satuan</th>
+                    <td>Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></td>
                   </tr>
                   <tr>
-                    <th>Number of Product to Deliver</th>
+                    <th>Jumlah (Qty)</th>
                     <td><?php echo $row['num_product']; ?></td>
                   </tr>
                   <tr>
-                    <th>Size</th>
+                    <th>Total Harga Roti Ini</th>
+                    <td style="font-weight: bold; color: #c2185b;">Rp <?php echo number_format($row['price'] * $row['num_product'], 0, ',', '.'); ?></td>
+                  </tr>
+                  <tr>
+                    <th>Ukuran Porsi</th>
                     <td><?php echo $row['size']; ?></td>
                   </tr>
                   <tr>
-                    <th>Color</th>
+                    <th>Varian Rasa</th>
                     <td><?php echo $row['color']; ?></td>
                   </tr>
                   <tr>
-                    <th>Delivery Address</th>
+                    <th>Alamat Pengiriman</th>
                     <td><?php echo $row['address']; ?></td>
                   </tr>
                   <tr>
-                    <th>City</th>
+                    <th>Kota</th>
                     <td><?php echo $row['city']; ?></td>
                   </tr>
                   <tr>
-                    <th>Pincode</th>
+                    <th>Kode Pos</th>
                     <td><?php echo $row['pincode']; ?></td>
                   </tr>
                   <tr>
-                    <th>Customer Name</th>
+                    <th>Nama Pelanggan</th>
                     <td><?php echo $row['cust_name']; ?></td>
                   </tr>
                   <tr>
-                    <th>Customer Mobile Number</th>
+                    <th>No. WhatsApp / HP</th>
                     <td><?php echo $row['mobile']; ?></td>
                   </tr>
                   <tr>
-                    <th>Customer Email ID</th>
+                    <th>Alamat Email</th>
                     <td><?php echo $row['email']; ?></td>
                   </tr>
                   <tr>
-                    <th>Payment Mode</th>
+                    <th>Metode Pembayaran</th>
                     <td><?php echo $row['payment']; ?></td>
                   </tr>
                   <tr>
-                    <th>Image-1 (Main)</th>
+                    <th>Gambar Pesanan</th>
                     <td align="center">
-                         <div style="width: 250px; height: 200px;"><img src="image/<?php echo $row['image']; ?>" style="height: 100%; width: 100%; object-fit: cover; object-position: top;"></td></div>
+                         <div style="width: 250px; height: 200px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
+                            <img src="image/<?php echo $row['image']; ?>" style="height: 100%; width: 100%; object-fit: cover; object-position: center;">
+                         </div>
                     </td>
                   </tr>
 
-                  </table>
-
-                  <a href="edit-order-status.php?e_id=<?php echo $row['id']; ?>" class="btn btn-primary">Edit Order Status</a>
-                  <br>
-                  <a href="view-received-order.php" class="btn btn-primary">Back to View Order List</a>
+                </table>
+              </div>
+              <div class="card-footer">
+                  <a href="edit-order-status.php?e_id=<?php echo $row['id']; ?>" class="btn btn-primary"><i class="fa fa-edit"></i> Ubah Status Pesanan</a>
+                  <a href="javascript:history.back()" class="btn btn-secondary float-right">Kembali</a>
+              </div>
  
             </div>
-            <!-- /.card -->
-                </form>
-              </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
-          <!--/.col (right) -->
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
+        </div></section>
+    </div>
   <?php include_once 'footer.php'; ?>
 
-  <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
+    </aside>
+  </div>
 <?php include_once 'scripts.php'; ?>
