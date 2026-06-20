@@ -197,7 +197,7 @@ if (isset($_POST['submit_product']))
                     <label for="image1">Gambar 1 (Gambar Utama)</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image1" name="image1" required>
+                        <input type="file" class="custom-file-input" id="image1" name="image1" accept="image/*" required>
                         <label class="custom-file-label" for="image1">Pilih gambar utama</label>
                       </div>
                     </div> 
@@ -207,7 +207,7 @@ if (isset($_POST['submit_product']))
                     <label for="image2">Gambar 2 (Opsional / Biarkan kosong jika tidak ada)</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image2" name="image2">
+                        <input type="file" class="custom-file-input" id="image2" name="image2" accept="image/*">
                         <label class="custom-file-label" for="image2">Pilih gambar kedua</label>
                       </div>
                     </div> 
@@ -217,7 +217,7 @@ if (isset($_POST['submit_product']))
                     <label for="image3">Gambar 3 (Opsional / Biarkan kosong jika tidak ada)</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image3" name="image3">
+                        <input type="file" class="custom-file-input" id="image3" name="image3" accept="image/*">
                         <label class="custom-file-label" for="image3">Pilih gambar ketiga</label>
                       </div>
                     </div> 
