@@ -15,6 +15,8 @@ if (isset($_POST['submit_product']))
     $dimension = $_POST['dimension'];
     $material = $_POST['material'];
     $stock = $_POST['stock'];
+    
+    // Proses Upload Gambar
     $image1 = rand(1,1000000).$_FILES['image1']['name'];
     $image2 = rand(1,1000000).$_FILES['image2']['name'];
     $image3 = rand(1,1000000).$_FILES['image3']['name'];
@@ -27,17 +29,15 @@ if (isset($_POST['submit_product']))
     move_uploaded_file($_FILES['image2']['tmp_name'],$path2);
     move_uploaded_file($_FILES['image3']['tmp_name'],$path3);
 
-
     $sql_insert = "insert into `product`(`name`,`price`,`category`,`tag`,`type`,`one_line_title`,`size`,`color`, `description`,`weight`,`dimension`,`material`,`image1`,`image2`,`image3`,`stock`)values('$name','$price','$category','$tag','$type','$one_line_title','$size','$color','$description','$weight','$dimension','$material','$image1','$image2','$image3','$stock')";
     mysqli_query($conn,$sql_insert);
 
-    header('location:add-product.php');
-
+    // Popup notifikasi sukses dan redirect
+    echo "<script>alert('Menu roti baru berhasil ditambahkan!'); window.location.href='add-product.php';</script>";
 }
 
 ?>
 
-  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -45,12 +45,12 @@ if (isset($_POST['submit_product']))
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add New Product</h1>
+            <h1>Tambah Menu Roti Baru</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Manajemen Produk</li>
             </ol>
           </div>
         </div>
@@ -62,25 +62,26 @@ if (isset($_POST['submit_product']))
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-6">
+          <div class="col-md-8">
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add New Product</h3>
+                <h3 class="card-title">Formulir Tambah Menu Roti</h3>
               </div>
               <!-- /.card-header -->
+              
               <!-- form start -->
               <form method="post" enctype="multipart/form-data">
-            
                   <div class="card-body">
+                    
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Name/Title of Product</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Title of New Photo" name="name" maxlength="40" required>
+                    <label for="name">Nama Menu / Roti</label>
+                    <input type="text" class="form-control" id="name" placeholder="Misal: Roti Sisir Rasa Coklat" name="name" maxlength="40" required>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Price</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" maxlength="50" placeholder="Enter Some Details of New Photo" name="price" maxlength="50" required>
+                    <label for="price">Harga (Rp)</label>
+                    <input type="text" class="form-control" id="price" maxlength="50" placeholder="Misal: 15000 (Hanya angka)" name="price" required>
                   </div>
 
                   <div class="form-group">
@@ -94,11 +95,23 @@ if (isset($_POST['submit_product']))
                   </div>
 
                   <div class="form-group">
-                    <label>Tag (Posisi Tampil di Beranda)</label><br>
-                    <input type="checkbox" name="tag[]" value="Best-seller"> Terlaris (Best Seller)<br>
-                    <input type="checkbox" name="tag[]" value="Featured"> Rekomendasi (Featured)<br>
-                    <input type="checkbox" name="tag[]" value="Sale"> Promo Spesial (Sale)<br>
-                    <input type="checkbox" name="tag[]" value="Top-rate"> Rating Tertinggi (Top Rate)
+                    <label>Tag (Posisi Tampil di Beranda)</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="tag[]" value="Best-seller" id="tag1">
+                      <label class="form-check-label" for="tag1">Terlaris (Best Seller)</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="tag[]" value="Featured" id="tag2">
+                      <label class="form-check-label" for="tag2">Rekomendasi (Featured)</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="tag[]" value="Sale" id="tag3">
+                      <label class="form-check-label" for="tag3">Promo Spesial (Sale)</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="tag[]" value="Top-rate" id="tag4">
+                      <label class="form-check-label" for="tag4">Rating Tertinggi (Top Rate)</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
@@ -112,30 +125,57 @@ if (isset($_POST['submit_product']))
                   </div>
 
                   <div class="form-group">
-                    <label>Ukuran Porsi (Size)</label><br>
-                    <input type="checkbox" name="size[]" value="Mini"> Mini<br>
-                    <input type="checkbox" name="size[]" value="Reguler"> Reguler<br>
-                    <input type="checkbox" name="size[]" value="Besar"> Besar<br>
-                    <input type="checkbox" name="size[]" value="Loyang/Box"> Loyang / Box
+                    <label>Ukuran Porsi (Size)</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="size[]" value="Mini" id="sz1">
+                      <label class="form-check-label" for="sz1">Mini</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="size[]" value="Reguler" id="sz2">
+                      <label class="form-check-label" for="sz2">Reguler</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="size[]" value="Besar" id="sz3">
+                      <label class="form-check-label" for="sz3">Besar</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="size[]" value="Loyang/Box" id="sz4">
+                      <label class="form-check-label" for="sz4">Loyang / Box</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
-                    <label>Varian Rasa Utama (Color)</label><br>
-                    <input type="checkbox" name="color[]" value="Original"> Original<br>
-                    <input type="checkbox" name="color[]" value="Coklat"> Coklat<br>
-                    <input type="checkbox" name="color[]" value="Keju"> Keju<br>
-                    <input type="checkbox" name="color[]" value="Daging/Abon"> Daging / Abon<br>
-                    <input type="checkbox" name="color[]" value="Buah"> Buah-buahan
+                    <label>Varian Rasa Utama (Color)</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="color[]" value="Original" id="cl1">
+                      <label class="form-check-label" for="cl1">Original</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="color[]" value="Coklat" id="cl2">
+                      <label class="form-check-label" for="cl2">Coklat</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="color[]" value="Keju" id="cl3">
+                      <label class="form-check-label" for="cl3">Keju</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="color[]" value="Daging/Abon" id="cl4">
+                      <label class="form-check-label" for="cl4">Daging / Abon</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="color[]" value="Buah" id="cl5">
+                      <label class="form-check-label" for="cl5">Buah-buahan</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
-                    <label>Judul Singkat Roti</label>
-                    <textarea type="text" class="form-control" placeholder="Masukkan Judul Singkat Roti" name="one_line_title" maxlength="100" required></textarea>
+                    <label>Slogan / Info Singkat Roti</label>
+                    <textarea type="text" class="form-control" placeholder="Misal: Roti lembut dengan isian coklat lumer" name="one_line_title" maxlength="100" required></textarea>
                   </div>
 
                   <div class="form-group">
                     <label>Deskripsi Lengkap Roti</label>
-                    <textarea rows="10" type="text" class="form-control" placeholder="Masukkan Deskripsi Roti" name="description" maxlength="500" required></textarea>
+                    <textarea rows="5" type="text" class="form-control" placeholder="Jelaskan detail roti di sini..." name="description" maxlength="500" required></textarea>
                   </div>
 
                    <div class="form-group">
@@ -154,41 +194,56 @@ if (isset($_POST['submit_product']))
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Image 1 (Main Image)</label>
+                    <label for="image1">Gambar 1 (Gambar Utama)</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image1" required>
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                        <input type="file" class="custom-file-input" id="image1" name="image1" required>
+                        <label class="custom-file-label" for="image1">Pilih gambar utama</label>
                       </div>
                     </div> 
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Stock</label>
+                    <label for="image2">Gambar 2 (Opsional / Biarkan kosong jika tidak ada)</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image2" name="image2">
+                        <label class="custom-file-label" for="image2">Pilih gambar kedua</label>
+                      </div>
+                    </div> 
+                  </div>
+
+                  <div class="form-group">
+                    <label for="image3">Gambar 3 (Opsional / Biarkan kosong jika tidak ada)</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image3" name="image3">
+                        <label class="custom-file-label" for="image3">Pilih gambar ketiga</label>
+                      </div>
+                    </div> 
+                  </div>
+
+                  <div class="form-group">
+                    <label>Ketersediaan Stok</label>
                     <select class="form-control" name="stock" required>
-                      <option selected disabled>-Select Avilability of Product-</option>
-                      <option>In Stock</option>
-                      <option>Out of Stock</option>
+                      <option selected disabled>- Pilih Status Stok -</option>
+                      <option value="In Stock">Tersedia (In Stock)</option>
+                      <option value="Out of Stock">Habis (Out of Stock)</option>
                     </select>
                   </div>
 
+                </div>
                 <!-- /.card-body -->
            
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" name="submit_product">Submit</button>
+                  <button type="submit" class="btn btn-primary" name="submit_product">Simpan Menu Baru</button>
                 </div>
-
 
               </form>
             </div>
             <!-- /.card -->
-                </form>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
           </div>
-          <!--/.col (right) -->
+          <!--/.col (left) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

@@ -1,7 +1,6 @@
 <?php include_once 'site_connection.php'; ?>
 
 <?php 
-
 if(isset($_SESSION['login']))
 {
 	$login_id = $_SESSION['login'];
@@ -9,369 +8,99 @@ if(isset($_SESSION['login']))
 	$data_login = mysqli_query($conn,$sql_select_login);
 	$row_login = mysqli_fetch_assoc($data_login);
 
-		$sql_select = "select * from `order` where `user_id`='$login_id' order by `status` desc";
-		$data = mysqli_query($conn,$sql_select);
-
-		$sql_select_o = "select * from `order` where `user_id`='$login_id'";
-		$data_o = mysqli_query($conn,$sql_select_o);
-		$row_o = mysqli_fetch_assoc($data_o);
-
-		$amt_total = "select * from `order` where `user_id`='$login_id'";
-		$data_total = mysqli_query($conn,$amt_total);
-
-		$total_price = 0;
-		while($row_total = mysqli_fetch_assoc($data_total))
-		{
-			$total_price = $total_price + $row_total['price'] * $row_total['num_product'];
-		}
-
-		$sql_select_r = "select * from `user_register` where `id`='$login_id'";
-		$data_r = mysqli_query($conn,$sql_select_r);
-		$row_r = mysqli_fetch_assoc($data_r);
-
-		$sql_select_pay = "select `payment` from `order` where `user_id`='$login_id'";
-		$data_pay = mysqli_query($conn,$sql_select_pay);
-		$row_pay = mysqli_fetch_assoc($data_pay);
-
-		if($row_pay!="")
-		{
-			if ($row_pay['payment']=='Cash on Delivery')
-			{
-				$payment_status = 'CASH ON DELIVERY';
-			}
-			else
-			{
-				$payment_status = 'PAID';
-			}
-
-			if (isset($_POST['cancel']))
-			{	
-				header('location:cancel-order.php');
-			}
-		}
-
+    // Mengambil data pesanan dari yang terbaru
+    $sql_select = "select * from `order` where `user_id`='$login_id' order by `id` desc";
+    $data = mysqli_query($conn,$sql_select);
 }
 else
 {
-	header('location:login_home.php');
+	header('location:login.php');
 }
+?>
 
-
- ?>
-
-<!-- breadcrumb -->
-<html lang="en">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-	<title>Home</title>
+	<title>Riwayat Pesanan - Roti Sahabat</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
-<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon-roti.png"/>
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/slick/slick.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/MagnificPopup/magnific-popup.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main_css.css">
-<!--===============================================================================================-->
 
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #fffafb; }
+        .page-title { font-family: 'Playfair Display', serif; color: #2b003a; font-weight: 800; font-size: 32px; text-align: center; margin-top: 20px; margin-bottom: 40px; }
+        
+        .wrap-table-shopping-cart { border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); background: #fff; overflow: hidden; border: none; }
+        .table-shopping-cart { width: 100%; border-collapse: collapse; }
+        .table-shopping-cart .table_head { background: linear-gradient(135deg, #c2185b, #800080); }
+        .table-shopping-cart .table_head th { background: transparent; color: #ffffff !important; padding: 18px 20px; font-weight: 600; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; border: none; text-align: left;}
+        .table-shopping-cart .table_head th.text-center { text-align: center; }
+        .table-shopping-cart .table_row td { border-bottom: 1px dashed #eee; vertical-align: middle; padding: 25px 20px; }
+        
+        .how-itemcart1 { width: 75px; height: 75px; border-radius: 10px; overflow: hidden; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+        .how-itemcart1 img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Status Pesanan */
+        .status-badge { display: inline-block; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase;}
+        .status-pending { background: #fff3cd; color: #28a745; border: 1px solid #c3e6cb; }
+        .status-delivered { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        
+        /* Tombol Aksi */
+        .btn-cancel { color: #ff4d4d; border: 1px solid #ff4d4d; border-radius: 20px; padding: 5px 15px; font-size: 12px; font-weight: 600; transition: 0.3s; display: inline-block; background: transparent; text-decoration: none;}
+        .btn-cancel:hover { background: #ff4d4d; color: white; text-decoration: none; }
+        
+        .btn-receipt { color: #2b003a; border: 1px solid #2b003a; border-radius: 20px; padding: 5px 15px; font-size: 12px; font-weight: 600; transition: 0.3s; display: inline-block; background: transparent; text-decoration: none; margin-bottom: 5px;}
+        .btn-receipt:hover { background: #2b003a; color: white; text-decoration: none; }
+
+        /* Responsivitas Mobile (Flexbox Method) */
+        @media (max-width: 767px) {
+            .wrap-table-shopping-cart { background: transparent; box-shadow: none; overflow: visible; }
+            .table-shopping-cart, .table-shopping-cart tbody, .table-shopping-cart tr { display: block; width: 100%; }
+            .table-shopping-cart .table_head { display: none; } 
+            
+            .table-shopping-cart .table_row { background: #fff; margin-bottom: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.05); padding: 20px; border: 1px solid #f9f9f9; }
+            
+            .table-shopping-cart td { display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 12px 0 !important; border-bottom: 1px dashed #eee !important; text-align: right !important; }
+            .table-shopping-cart td:last-child { border-bottom: none !important; }
+            
+            .table-shopping-cart td::before { content: attr(data-label); font-weight: 700; color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;}
+
+            .table-shopping-cart td.column-1 { flex-direction: column !important; justify-content: center !important; padding: 0 0 15px 0 !important; border-bottom: 2px dashed #f0f0f0 !important; }
+            .table-shopping-cart td.column-1::before { display: none !important; } 
+            
+            .cart-item-detail { text-align: right; }
+            .cart-item-detail ul { text-align: right; display: block; margin-top: 5px; list-style: none; padding: 0;}
+            
+            .action-col { flex-direction: column; align-items: flex-end !important; }
+            .action-col a { margin-left: 0; margin-top: 5px; }
+        }
+    </style>
 </head>
 <body class="animsition">
 
+    <!-- Memanggil Header Bersih Roti Sahabat -->
 	<header class="header-v4">
-		<!-- Header desktop -->
-		<div class="container-menu-desktop">
-			<!-- Topbar -->
-			<div class="top-bar">
-				<div class="content-topbar flex-sb-m h-full container">
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Help & FAQs
-						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							EN
-						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							INR
-						</a>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<div class="profile-main-menu">
-							<a href="#" class="flex-c-m trans-04 p-lr-25" style="border-left: 0">My Account</a>
-								<ul class="profile-sub-menu">
-									<li><h5><?php echo $row_login['name']; ?></h5></li>
-									<li><a href="my_profile.php">My Profile</a></li>
-									<li><a href="order-list.php">Order List</a></li>
-									<li><a href="shoping-cart.php">My Cart</a></li>
-									<li><a href="logouts.php">Logout</a></li>
-								</ul>
-							</div>
-						<?php }
-						else{ ?>
-							<a href="login_home.php" class="flex-c-m trans-04 p-lr-25">
-								Login / Sign-in
-							</a>
-						<?php } ?>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<a style="color: #b2b2b2;" class="flex-c-m trans-04 p-lr-25">
-								Hello...<?php echo $row_login['name']; ?>!
-							</a>
-						<?php } ?>
-					</div>
-				</div>
-			</div>
-
-			<div class="wrap-menu-desktop">
-				<nav class="limiter-menu-desktop container">
-					
-					<!-- Logo desktop -->		
-					<a href="index.php" class="logo">
-						<img src="images/icons/logo-01.png" alt="IMG-LOGO">
-					</a>
-
-					<!-- Menu desktop -->
-					<!-- <div class="menu-desktop">
-						<ul class="main-menu">
-							<li class="active-menu">
-								<a href="index.php">Home</a>
-								<ul class="sub-menu">
-									<li><a href="index.php">Homepage 1</a></li>
-									<li><a href="index.php">Homepage 2</a></li>
-									<li><a href="index.php">Homepage 3</a></li>
-								</ul>
-							</li>
-
-							<li>
-								<a href="product.php">Shop</a>
-							</li>
-
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.php">Shopping Cart</a>
-							</li>
-
-							<li>
-								<a href="blog.php">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.php">About</a>
-							</li>
-
-							<li>
-								<a href="contact.php">Contact</a>
-							</li>
-						</ul>
-					</div> -->	
-
-					<!-- Icon header -->
-					<!-- <div class="wrap-icon-header flex-w flex-r-m" id="cart_data_count">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-							<i class="zmdi zmdi-search"></i>
-						</div>
-
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="
-						<?php if (isset($_SESSION['login']))
-						{ echo $data_count; }
-						else{
-							echo "0";
-						} ?>">
-							<i class="zmdi zmdi-shopping-cart"></i>
-						</div>
-
-						<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
-					</div> -->
-				</nav>
-			</div>	
-		</div>
-
-		<!-- Header Mobile -->
-		<div class="wrap-header-mobile">
-			<!-- Logo moblie -->		
-			<div class="logo-mobile">
-				<a href="index.php"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
-			</div>
-
-			<!-- Icon header -->
-			<!-- <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-					<i class="zmdi zmdi-search"></i>
-				</div>
-
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="8">
-					<i class="zmdi zmdi-shopping-cart"></i>
-				</div>
-
-				<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="0">
-					<i class="zmdi zmdi-favorite-outline"></i>
-				</a>
-			</div> -->
-
-			<!-- Button show menu -->
-			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-				<span class="hamburger-box">
-					<span class="hamburger-inner"></span>
-				</span>
-			</div>
-		</div>
-
-
-		<!-- Menu Mobile -->
-		<div class="menu-mobile">
-			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
-
-				<li>
-					<div class="right-top-bar flex-w">
-						<a href="#" class="flex-c-m p-lr-13 trans-04">
-							Help & FAQs
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-13 trans-04">
-							INR
-						</a>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<div class="profile-main-menu-m">
-							<a href="#" class="flex-c-m trans-04 p-lr-25" style="border-left: 0">My Account</a>
-								<ul class="profile-sub-menu-m">
-									<li><h5><?php echo $row_login['name']; ?></h5></li>
-									<li><a href="index.php" class="right-top-bar-2">My Profile</a></li>
-									<li><a href="index.php">Order List</a></li>
-									<li><a href="shoping-cart.php">My Cart</a></li>
-									<li><a href="logout.php">Logout</a></li>
-								</ul>
-							</div>
-						<?php }
-						else{ ?>
-							<a href="login_home.php" class="flex-c-m trans-04 p-lr-25">
-								Login / Sign-in
-							</a>
-						<?php } ?>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<a style="color: #b2b2b2;" class="flex-c-m trans-04 p-lr-15">
-								Hello... <?php echo $row_login['name']; ?>!
-							</a>
-						<?php } ?>
-					</div>
-				</li>
-			</ul>
-
-			<!-- <ul class="main-menu-m">
-				<li>
-					<a href="index.php">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="index.php">Homepage 1</a></li>
-						<li><a href="home-02.php">Homepage 2</a></li>
-						<li><a href="home-03.php">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
-				</li>
-
-				<li>
-					<a href="product.php">Shop</a>
-				</li>
-
-				<li>
-					<a href="shoping-cart.php" class="label1 rs1" data-label1="hot">Shopping Cart</a>
-				</li>
-
-				<li>
-					<a href="blog.php">Blog</a>
-				</li>
-
-				<li>
-					<a href="about.php">About</a>
-				</li>
-
-				<li>
-					<a href="contact.php">Contact</a>
-				</li>
-			</ul> -->
-		</div>
-
-		<!-- Modal Search -->
-		<!-- <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-			<div class="container-search-header">
-				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-					<img src="images/icons/icon-close2.png" alt="CLOSE">
-				</button>
-
-				<form class="wrap-search-header flex-w p-l-15">
-					<button class="flex-c-m trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
-				</form>
-			</div>
-		</div> -->
+        <?php include_once 'header.php'; ?>
 	</header>
 
 	<div class="container">
-		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-15 p-lr-0-lg">
+		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-b-10 p-lr-0-lg">
 			<a href="index.php" class="stext-109 cl8 hov-cl1 trans-04">
-				Home
+				Beranda
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
-
-			<a href="shoping-cart.php" class="stext-109 cl8 hov-cl1 trans-04">
-				Shoping Cart
-				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-			</a>
-
-			<span class="stext-109 cl4">
-				Your Order-list
-			</span>
+			<span class="stext-109 cl4">Riwayat Pesanan</span>
 		</div>
 	</div>
 
-	<div class="order_placed">
-		<h1>Your Orders are Below</h1>
-	</div>
+    <h2 class="page-title">Riwayat Pesananmu</h2>
 
-	<!-- Shoping Cart -->
-<div id="new_number_of_product">
-	<form class="bg0 p-t-45 p-b-85" method="post">
+	<form class="p-b-85" method="post">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 col-xl-10 m-lr-auto m-b-50">
@@ -379,68 +108,74 @@ else
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart" align="center">
 								<tr class="table_head">
-									<th class="column-1">Product</th>
-									<th class="column-2"></th>
-									<th class="column-3">Price</th>
-									<th class="column-4">Quantity</th>
-									<th class="column-5">Total</th>
-									<th class="column-5 text-center">Delivery Status</th>
-									<th class="column-5"></th>
+									<th class="column-1" style="text-align: center;">Menu</th>
+									<th class="column-2">Detail Roti</th>
+									<th class="column-3">Harga</th>
+									<th class="column-4" style="text-align: center;">Qty</th>
+									<th class="column-5">Subtotal</th>
+									<th class="column-6 text-center">Status</th>
+									<th class="column-7 text-center">Aksi</th>
 								</tr>
 
-						<?php if(isset($_SESSION['login']))
-						{
-						while($row = mysqli_fetch_assoc($data)) { ?>
+						<?php if(isset($_SESSION['login'])) {
+                            if(mysqli_num_rows($data) > 0) {
+						        while($row = mysqli_fetch_assoc($data)) { ?>
 								<tr class="table_row">
-									<td class="column-1" align="center">
+									<td class="column-1" align="center" data-label="Menu">
 										<div class="how-itemcart1">
-											<img src="admin/image/<?php echo $row['image']; ?>">
+											<img src="admin/image/<?php echo $row['image']; ?>" alt="Roti">
 										</div>												
 									</td>
-									<td class="column-2">
-										<div class="p-b-10"><?php echo $row['name']; ?></div>
-										<ul>
-											<li><b>Size : </b><?php echo $row['size']; ?></li>
-											<li><b>Color : </b><?php echo $row['color']; ?></li>
+									<td class="column-2" data-label="Detail Roti">
+										<div class="p-b-10 cart-item-detail" style="font-weight: 700; color: #2b003a; font-size: 15px;"><?php echo $row['name']; ?></div>
+										<ul style="font-size: 12px; color: #666;">
+											<li><b>Ukuran : </b><?php echo $row['size']; ?></li>
+											<li><b>Varian : </b><?php echo $row['color']; ?></li>
 										</ul>	
 									</td>
-									<td class="column-3">Rs.<?php echo $row['price']; ?></td>
-									<td class="column-4" align="center">
-										<span class="num_pro"><?php echo $row['num_product']; ?></span>
+									<td class="column-3" data-label="Harga" style="color: #c2185b; font-weight: 600;">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></td>
+									<td class="column-4" align="center" data-label="Qty">
+										<span style="font-weight: 700; background: #f9f9f9; padding: 5px 15px; border-radius: 5px;"><?php echo $row['num_product']; ?></span>
 									</td>
-									<td class="column-5">
+									<td class="column-5" data-label="Subtotal" style="font-weight: 700; color: #2b003a;">
 										<?php 
-
-											$total_pro = $row['num_product'];
-											$price = $row['price'];
-
-											echo 'Rs.'.$total_pro*$price;
+											$sub_total = $row['num_product'] * $row['price'];
+											echo 'Rp '. number_format($sub_total, 0, ',', '.');
 										 ?>
 									</td>
-									<td class="column-5 text-center">
-										<?php echo $row['status']; ?>
+									<td class="column-6 text-center" data-label="Status">
+                                        <?php if($row['status'] == "Pending") { ?>
+                                            <span class="status-badge status-pending"><i class="fa fa-clock-o m-r-5"></i> Diproses</span>
+                                        <?php } else { ?>
+                                            <span class="status-badge status-delivered"><i class="fa fa-check m-r-5"></i> Selesai</span>
+                                        <?php } ?>
 									</td>
+									<td class="column-7 text-center action-col" data-label="Aksi">
+                                        <!-- Tombol Lihat/Download Struk -->
+                                        <a href="order.php?view_id=<?php echo $row['id']; ?>" class="btn-receipt"><i class="fa fa-file-text-o m-r-5"></i> Struk</a>
 
-									<?php if($row['status']=="Pending") { ?>
-									<td class="column-5 text-center">
-										<a href="cancel-order.php?c_id=<?php echo $row['id']; ?>" class="flex-c-m stext-104 cl0 size-107 bg3 bor14 hov-btn3 p-lr-15 m-t-10 m-b-10 trans-04 pointer order_delete" attr_id=<?php echo $row['id']; ?>>Calncel Order</a>
+										<?php if($row['status'] == "Pending") { ?>
+										    <a href="cancel-order.php?c_id=<?php echo $row['id']; ?>" class="btn-cancel" onclick="return confirm('Apakah kamu yakin ingin membatalkan pesanan ini?');"><i class="fa fa-times m-r-5"></i> Batal</a>
+										<?php } ?>
 									</td>
-									<?php } ?>
 								</tr>
-						<?php } } ?>
+						<?php       } 
+                                } else {
+                                    echo '<tr><td colspan="7" align="center" style="padding: 50px 0; color: #888;">Kamu belum memiliki riwayat pesanan. Yuk, mulai belanja!</td></tr>';
+                                }
+                            } 
+                        ?>
 
 							</table>
 						</div>
 
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</form>
-</div>
-
 
 	<?php include_once 'footer.php'; ?>
-
 	<?php include_once 'scripts.php'; ?>
+</body>
+</html>

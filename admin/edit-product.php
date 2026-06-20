@@ -84,13 +84,11 @@ if (isset($_POST['edited_product']))
     $sql_update_cart = "update `cart` set `name`='$name',`price`='$price',`image`='$image1' where `product_id`='$edit_id'";
     mysqli_query($conn,$sql_update_cart);
 
-    header('location:view-more-product.php?v_id='.$row['id']);
-
+    echo "<script>alert('Data Roti berhasil diperbarui!'); window.location.href='view-more-product.php?v_id=".$row['id']."';</script>";
 } 
 
 ?>
 
-  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -98,12 +96,12 @@ if (isset($_POST['edited_product']))
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add New Product</h1>
+            <h1>Edit Menu Roti</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Edit Produk</li>
             </ol>
           </div>
         </div>
@@ -115,291 +113,215 @@ if (isset($_POST['edited_product']))
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-6">
+          <div class="col-md-8">
             <!-- general form elements -->
-            <div class="card card-primary">
+            <div class="card card-warning">
               <div class="card-header">
-                <h3 class="card-title">Edit This Product</h3>
+                <h3 class="card-title">Formulir Edit Menu Roti</h3>
               </div>
               <!-- /.card-header -->
+              
               <!-- form start -->
               <form method="post" enctype="multipart/form-data">
                 <div class="card-body">
+                    
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Stock</label>
-                    <select class="form-control" name="stock" required>
-                      <option selected disabled>-Select Avilability of Product-</option>
-                      <option <?php if($row['stock']=="In Stock"){echo "selected";} ?>>In Stock</option>
-                      <option <?php if($row['stock']=="Out of Stock"){echo "selected";} ?>>Out of Stock</option>
-                    </select>
+                    <label>Nama Menu / Roti</label>
+                    <input type="text" class="form-control" placeholder="Misal: Roti Sisir Rasa Coklat" name="name" maxlength="40" required value="<?php echo @$row['name']; ?>">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Name/Title of Product</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Title of New Photo" name="name" maxlength="40" required value="<?php echo @$row['name']; ?>">
+                    <label>Harga (Rp)</label>
+                    <input type="text" class="form-control" maxlength="50" placeholder="Misal: 15000 (Hanya angka)" name="price" required value="<?php echo @$row['price']; ?>">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Price</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" maxlength="50" placeholder="Enter Some Details of New Photo" name="price" maxlength="50" required value="<?php echo @$row['price']; ?>">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Category of Product</label>
+                    <label>Kategori Roti</label>
                     <select class="form-control" name="category" required>
-                      <option selected disabled>-Select Category of Product-</option>
-                      <option <?php if($row['category']=="Women"){echo "selected";} ?>>Women</option>
-                      <option <?php if($row['category']=="Men"){echo "selected";} ?>>Men</option>
-                      <option <?php if($row['category']=="Accessories"){echo "selected";} ?>>Accessories</option>
+                      <option disabled>- Pilih Kategori -</option>
+                      <option value="roti-manis" <?php if($row['category']=="roti-manis"){echo "selected";} ?>>Roti Manis</option>
+                      <option value="roti-gurih" <?php if($row['category']=="roti-gurih"){echo "selected";} ?>>Roti Gurih</option>
+                      <option value="kue-pastry" <?php if($row['category']=="kue-pastry"){echo "selected";} ?>>Kue & Pastry</option>
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Tag of Product (As per the offer)</label>
-                      <div>
-                        <input type="checkbox" name="tag[]" value="Best-seller" 
-                        <?php 
-                        for($i=0; $i<$tag_length; $i++)
-                          { 
-                            if($tag[$i]=="Best-seller")
-                              {echo "checked";}
-                          } 
-                        ?>> Best-seller <br>
-                        <input type="checkbox" name="tag[]" value="Featured"
-                        <?php 
-                        for($i=0; $i<$tag_length; $i++)
-                          { 
-                            if($tag[$i]=="Featured")
-                              {echo "checked";}
-                          } 
-                        ?>> Featured <br>
-                        <input type="checkbox" name="tag[]" value="Sale"
-                        <?php 
-                        for($i=0; $i<$tag_length; $i++)
-                          { 
-                            if($tag[$i]=="Sale")
-                              {echo "checked";}
-                          } 
-                        ?>> Sale <br>
-                        <input type="checkbox" name="tag[]" value="Top-rate"
-                        <?php 
-                        for($i=0; $i<$tag_length; $i++)
-                          { 
-                            if($tag[$i]=="Top-rate")
-                              {echo "checked";}
-                          } 
-                        ?>> Top-rate <br>
-                     </div>
+                    <label>Tag (Posisi Tampil di Beranda)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tag[]" value="Best-seller" id="tag1" <?php for($i=0; $i<$tag_length; $i++) { if($tag[$i]=="Best-seller") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="tag1">Terlaris (Best Seller)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tag[]" value="Featured" id="tag2" <?php for($i=0; $i<$tag_length; $i++) { if($tag[$i]=="Featured") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="tag2">Rekomendasi (Featured)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tag[]" value="Sale" id="tag3" <?php for($i=0; $i<$tag_length; $i++) { if($tag[$i]=="Sale") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="tag3">Promo Spesial (Sale)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tag[]" value="Top-rate" id="tag4" <?php for($i=0; $i<$tag_length; $i++) { if($tag[$i]=="Top-rate") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="tag4">Rating Tertinggi (Top Rate)</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Type of Product</label>
+                    <label>Tipe (Metode Masak)</label>
                     <select class="form-control" name="type" required>
-                      <option selected disabled>-Select Type of Product-</option>
-                      <option <?php if($row['type']=="Shirt"){echo "selected";} ?>>Shirt</option>
-                      <option <?php if($row['type']=="T-shirt"){echo "selected";} ?>>T-shirt</option>
-                      <option <?php if($row['type']=="Jeans"){echo "selected";} ?>>Jeans</option>
-                      <option <?php if($row['type']=="Cotton-pent"){echo "selected";} ?>>Cotton-pent</option>
-                      <option <?php if($row['type']=="Top"){echo "selected";} ?>>Top</option>
-                      <option <?php if($row['type']=="Kurti"){echo "selected";} ?>>Kurti</option>
-                      <option <?php if($row['type']=="Sarwar"){echo "selected";} ?>>Sarwar</option>
-                      <option <?php if($row['type']=="Capri"){echo "selected";} ?>>Capri</option>
-                      <option <?php if($row['type']=="Belt"){echo "selected";} ?>>Belt</option>
-                      <option <?php if($row['type']=="Gogles"){echo "selected";} ?>>Gogles</option>
-                      <option <?php if($row['type']=="Purse"){echo "selected";} ?>>Purse</option>
-                      <option <?php if($row['type']=="Cap"){echo "selected";} ?>>Cap</option>
-                      <option <?php if($row['type']=="Shoes"){echo "selected";} ?>>Shoes</option>
-                      <option <?php if($row['type']=="Socks"){echo "selected";} ?>>Socks</option>
-                      <option <?php if($row['type']=="Watch"){echo "selected";} ?>>Watch</option>
-                      <option <?php if($row['type']=="Bag"){echo "selected";} ?>>Bag</option>
+                      <option disabled>- Pilih Tipe -</option>
+                      <option value="Panggang" <?php if($row['type']=="Panggang"){echo "selected";} ?>>Panggang (Oven)</option>
+                      <option value="Goreng" <?php if($row['type']=="Goreng"){echo "selected";} ?>>Goreng</option>
+                      <option value="Kukus" <?php if($row['type']=="Kukus"){echo "selected";} ?>>Kukus</option>
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Select Avilable Size of Product</label>
-                      <div>
-                        <input type="checkbox" name="size[]" value="S - Small"
-                        <?php 
-                        for($i=0; $i<$size_length; $i++)
-                          { 
-                            if($size[$i]=="S - Small")
-                              {echo "checked";}
-                          } 
-                        ?>> S - Small <br>
-                        <input type="checkbox" name="size[]" value="M - Medium"
-                        <?php 
-                        for($i=0; $i<$size_length; $i++)
-                          { 
-                            if($size[$i]=="M - Medium")
-                              {echo "checked";}
-                          } 
-                        ?>> M - Medium <br>
-                        <input type="checkbox" name="size[]" value="L - Large"
-                        <?php 
-                        for($i=0; $i<$size_length; $i++)
-                          { 
-                            if($size[$i]=="L - Large")
-                              {echo "checked";}
-                          } 
-                        ?>> L - Large <br>
-                        <input type="checkbox" name="size[]" value="XL - Extra Large"
-                        <?php 
-                        for($i=0; $i<$size_length; $i++)
-                          { 
-                            if($size[$i]=="XL - Extra Large")
-                              {echo "checked";}
-                          } 
-                        ?>> XL - Extra Large <br>
-                        <input type="checkbox" name="size[]" value="XXL - Extra Extra Large"
-                        <?php 
-                        for($i=0; $i<$size_length; $i++)
-                          { 
-                            if($size[$i]=="XXL - Extra Extra Large")
-                              {echo "checked";}
-                          } 
-                        ?>> XXL - Extra Extra Large <br>
-                     </div>
+                    <label>Ukuran Porsi (Size)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="size[]" value="Mini" id="sz1" <?php for($i=0; $i<$size_length; $i++) { if($size[$i]=="Mini") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="sz1">Mini</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="size[]" value="Reguler" id="sz2" <?php for($i=0; $i<$size_length; $i++) { if($size[$i]=="Reguler") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="sz2">Reguler</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="size[]" value="Besar" id="sz3" <?php for($i=0; $i<$size_length; $i++) { if($size[$i]=="Besar") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="sz3">Besar</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="size[]" value="Loyang/Box" id="sz4" <?php for($i=0; $i<$size_length; $i++) { if($size[$i]=="Loyang/Box") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="sz4">Loyang / Box</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputFile">Select Available Color of Product</label>
-                      <div>
-                        <input type="checkbox" name="color[]" value="Black"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="Black")
-                              {echo "checked";}
-                          } 
-                        ?>> Black <br>
-                        <input type="checkbox" name="color[]" value="Blue"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="Blue")
-                              {echo "checked";}
-                          } 
-                        ?>> Blue <br>
-                        <input type="checkbox" name="color[]" value="Gray"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="Gray")
-                              {echo "checked";}
-                          } 
-                        ?>> Gray <br>
-                        <input type="checkbox" name="color[]" value="Green"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="Green")
-                              {echo "checked";}
-                          } 
-                        ?>> Green <br>
-                        <input type="checkbox" name="color[]" value="Red"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="Red")
-                              {echo "checked";}
-                          } 
-                        ?>> Red <br>
-                        <input type="checkbox" name="color[]" value="White"
-                        <?php 
-                        for($i=0; $i<$color_length; $i++)
-                          { 
-                            if($color[$i]=="White")
-                              {echo "checked";}
-                          } 
-                        ?>> White <br>
-                     </div>
+                    <label>Varian Rasa Utama (Color)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="color[]" value="Original" id="cl1" <?php for($i=0; $i<$color_length; $i++) { if($color[$i]=="Original") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="cl1">Original</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="color[]" value="Coklat" id="cl2" <?php for($i=0; $i<$color_length; $i++) { if($color[$i]=="Coklat") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="cl2">Coklat</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="color[]" value="Keju" id="cl3" <?php for($i=0; $i<$color_length; $i++) { if($color[$i]=="Keju") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="cl3">Keju</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="color[]" value="Daging/Abon" id="cl4" <?php for($i=0; $i<$color_length; $i++) { if($color[$i]=="Daging/Abon") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="cl4">Daging / Abon</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="color[]" value="Buah" id="cl5" <?php for($i=0; $i<$color_length; $i++) { if($color[$i]=="Buah") {echo "checked";} } ?>>
+                        <label class="form-check-label" for="cl5">Buah-buahan</label>
+                    </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">One Line Title of Product</label>
-                    <textarea type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter One Line Title of Product" name="one_line_title" maxlength="100" required><?php echo $row['one_line_title']; ?></textarea>
+                    <label>Slogan / Info Singkat Roti</label>
+                    <textarea type="text" class="form-control" placeholder="Masukkan Judul Singkat" name="one_line_title" maxlength="100" required><?php echo $row['one_line_title']; ?></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Description of Product</label>
-                    <textarea rows="10" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Description of Product" name="description" maxlength="500" required><?php echo $row['description']; ?></textarea>
+                    <label>Deskripsi Lengkap Roti</label>
+                    <textarea rows="5" type="text" class="form-control" placeholder="Masukkan Deskripsi Lengkap" name="description" maxlength="500" required><?php echo $row['description']; ?></textarea>
                   </div>
 
                    <div class="form-group">
-                    <label for="exampleInputPassword1">Weight of Product (in KG)</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Weight of Product" name="weight" maxlength="10" required value="<?php echo $row['weight']; ?>">
+                    <label>Berat Roti (Gram/KG)</label>
+                    <input type="text" class="form-control" placeholder="Misal: 500 gram" name="weight" maxlength="10" required value="<?php echo $row['weight']; ?>">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Dimensions of Product (in CM)</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter Dimensions of Product" name="dimension" maxlength="20" required value="<?php echo $row['dimension']; ?>">
+                    <label>Dimensi/Ukuran Roti (CM)</label>
+                    <input type="text" class="form-control" placeholder="Misal: 20x10x5 cm" name="dimension" maxlength="20" required value="<?php echo $row['dimension']; ?>">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Type of Material used in Product</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter type of materail used in product" name="material" maxlength="50" required value="<?php echo $row['material']; ?>">
+                    <label>Komposisi Utama (Material)</label>
+                    <input type="text" class="form-control" placeholder="Misal: Tepung Terigu, Mentega" name="material" maxlength="50" required value="<?php echo $row['material']; ?>">
                   </div>
 
-                  <div class="form-group">
-                    <label for="exampleInputFile">Image 1 (Main Image)</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image1">
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label></div>
-                    </div> 
-                  </div>
-                   <label for="exampleInputFile">Current Image-1 (Main Image) of Product</label>
-                        <div style="width: 200px; height: 200px;">
-                            <img src="image/<?php echo $row['image1']; ?>" style="height: 100%; width: 100%; object-fit: cover; object-position: top;">
+                  <!-- Pengaturan Gambar -->
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gambar 1 (Utama)</label>
+                            <div class="input-group mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="image1" name="image1">
+                                    <label class="custom-file-label" for="image1">Ganti gambar utama</label>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mb-2">Gambar Saat Ini:</small>
+                            <div style="width: 150px; height: 150px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
+                                <img src="image/<?php echo $row['image1']; ?>" style="height: 100%; width: 100%; object-fit: cover;">
+                            </div>
                         </div>
-                  <br>  
-
-                  <div class="form-group">
-                    <label for="exampleInputFile">Image 2</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image2">
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label>
-                      </div>
-                    </div> 
-                  </div>
-                  <label for="exampleInputFile">Current Image-2 of Product</label>
-                        <div style="width: 200px; height: 200px;">
-                            <img src="image/<?php echo $row['image2']; ?>" style="height: 100%; width: 100%; object-fit: cover; object-position: top;">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Ketersediaan Stok</label>
+                            <select class="form-control" name="stock" required>
+                                <option disabled>- Pilih Status Stok -</option>
+                                <option value="In Stock" <?php if($row['stock']=="In Stock"){echo "selected";} ?>>Tersedia (In Stock)</option>
+                                <option value="Out of Stock" <?php if($row['stock']=="Out of Stock"){echo "selected";} ?>>Habis (Out of Stock)</option>
+                            </select>
                         </div>
-                  <br>
-
-                  <div class="form-group">
-                    <label for="exampleInputFile">Image 3</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile" name="image3">
-                        <label class="custom-file-label" for="exampleInputFile">Choose image</label>
-                      </div>
-                    </div> 
-                  </div>
-                  <label for="exampleInputFile">Current Image-3 of Product</label>
-                  <div style="width: 200px; height: 200px;">
-                      <img src="image/<?php echo $row['image3']; ?>" style="height: 100%; width: 100%; object-fit: cover; object-position: top;">
+                    </div>
                   </div>
 
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gambar 2 (Opsional)</label>
+                            <div class="input-group mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="image2" name="image2">
+                                    <label class="custom-file-label" for="image2">Ganti gambar 2</label>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mb-2">Gambar Saat Ini:</small>
+                            <div style="width: 150px; height: 150px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
+                                <img src="image/<?php echo $row['image2']; ?>" style="height: 100%; width: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gambar 3 (Opsional)</label>
+                            <div class="input-group mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="image3" name="image3">
+                                    <label class="custom-file-label" for="image3">Ganti gambar 3</label>
+                                </div>
+                            </div>
+                            <small class="text-muted d-block mb-2">Gambar Saat Ini:</small>
+                            <div style="width: 150px; height: 150px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
+                                <img src="image/<?php echo $row['image3']; ?>" style="height: 100%; width: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
                 <!-- /.card-body -->
            
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" name="edited_product">Submit</button>
+                  <button type="submit" class="btn btn-warning" name="edited_product"><i class="fa fa-save"></i> Perbarui Data Roti</button>
+                  <a href="view-more-product.php?v_id=<?php echo $row['id']; ?>" class="btn btn-secondary float-right">Batal</a>
                 </div>
 
-              </div>
               </form>
             </div>
             <!-- /.card -->
-                </form>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
           </div>
-          <!--/.col (right) -->
+          <!--/.col (left) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
