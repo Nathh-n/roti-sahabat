@@ -60,7 +60,7 @@
 					</h4>
 
 					<p class="stext-107 cl7 size-201">
-						Ada pertanyaan atau pesanan khusus? Kunjungi toko kami di Jl. Roti Manis No. 123, Bandung, atau hubungi kami di (+62) 812 3456 7890
+						Ada pertanyaan atau pesanan khusus? Kunjungi toko kami di Alamat: Jl. Kutoarjo No. 8 Jatisari, Kebumen, Kebumen, Jawa Tengah, atau hubungi kami di (+62) 857 2983 0444
 					</p>
 
 					<div class="p-t-27">
@@ -68,11 +68,11 @@
 							<i class="fa fa-facebook"></i>
 						</a>
 
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						<a href="https://www.instagram.com/rotisahabat_kebumen" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-instagram"></i>
 						</a>
 
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						<a href="wa.me/6285729830444" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-whatsapp"></i>
 						</a>
 					</div>

@@ -9,11 +9,12 @@ $row = mysqli_fetch_assoc($data);
 if(isset($_GET['d_id']))
 {
     $delete_id = $_GET['d_id'];
-
     $sql_delete = "delete from `product` where `id`='$delete_id'";
     mysqli_query($conn,$sql_delete);
-
-    header('location:view-product.php');
+    
+    // Tambahkan pesan sukses dan arahkan kembali
+    echo "<script>alert('Produk berhasil dihapus!'); window.location.href='view-product.php';</script>";
+    exit; // Wajib ditambahkan agar script berhenti
 }
 
 ?>
@@ -140,7 +141,7 @@ if(isset($_GET['d_id']))
 
               <div class="card-footer">
                   <a href="edit-product.php?e_id=<?php echo $row['id']; ?>" class="btn btn-warning"><i class="fa fa-edit"></i> Edit Detail Roti</a>
-                  <a href="view-product.php?d_id=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus roti ini?');"><i class="fa fa-trash"></i> Hapus Roti</a>
+                  <a href="view-more-product.php?v_id=<?php echo $row['id']; ?>&d_id=<?php echo $row['id']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus roti ini?');"><i class="fa fa-trash"></i> Hapus Roti</a>
                   <a href="view-product.php" class="btn btn-secondary float-right">Kembali ke Daftar Menu</a>
               </div>
  
