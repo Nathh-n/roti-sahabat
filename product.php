@@ -86,33 +86,37 @@ if (isset($_POST['cart_submit'])) {
         exit(); // <--- Tambahkan di sini juga
     }
 }
-// --- AKHIR KODE PROSES TAMBAH KERANJANG ---
+// Cek apakah ada kategori yang dipilih
+$kategori_filter = "";
+if (isset($_GET['kategori'])) {
+    $kat = $_GET['kategori'];
+    $kategori_filter = "AND `category`='$kat'";
+}
 
 if(isset($_SESSION['short']))
 {
-	if($_SESSION['short']=='default')
-	{
-		$sql_select = "select * from `product` where `stock`='In Stock' limit $start,$limit";
-		$data = mysqli_query($conn,$sql_select);
-	}
-	if($_SESSION['short']=='newness')
-	{
-		$sql_select = "select * from `product` where `stock`='In Stock' order by `id` asc limit $start,$limit";
-		$data = mysqli_query($conn,$sql_select);
-	}
-	if($_SESSION['short']=='low_high')
-	{
-		$sql_select = "select * from `product` where `stock`='In Stock' order by `price` asc limit $start,$limit";
-		$data = mysqli_query($conn,$sql_select);
-	}
-	if($_SESSION['short']=='high_low')
-	{
-		$sql_select = "select * from `product` where `stock`='In Stock' order by `price` desc limit $start,$limit";
-		$data = mysqli_query($conn,$sql_select);
-	}
-	
+    // Filter berdasarkan kategori + Sorting
+    if($_SESSION['short']=='default')
+    {
+        $sql_select = "select * from `product` where `stock`='In Stock' $kategori_filter limit $start,$limit";
+        $data = mysqli_query($conn,$sql_select);
+    }
+    elseif($_SESSION['short']=='newness')
+    {
+        $sql_select = "select * from `product` where `stock`='In Stock' $kategori_filter order by `id` asc limit $start,$limit";
+        $data = mysqli_query($conn,$sql_select);
+    }
+    elseif($_SESSION['short']=='low_high')
+    {
+        $sql_select = "select * from `product` where `stock`='In Stock' $kategori_filter order by `price` asc limit $start,$limit";
+        $data = mysqli_query($conn,$sql_select);
+    }
+    elseif($_SESSION['short']=='high_low')
+    {
+        $sql_select = "select * from `product` where `stock`='In Stock' $kategori_filter order by `price` desc limit $start,$limit";
+        $data = mysqli_query($conn,$sql_select);
+    }
 }
-
 
 if(isset($_GET['search_product']))
 {
@@ -238,30 +242,25 @@ if(isset($_GET['search_product']))
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
-						All products
-					</button>
-
-					<a href="women-product.php" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
-						Women-Products
+					<!-- Tombol "Semua Menu" -->
+					<a href="product.php" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 <?php echo !isset($_GET['kategori']) ? 'how-active1' : ''; ?>">
+						Semua Menu
 					</a>
 
-					<a href="men-product.php" class="stext-106 stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
-						Men-Products
+					<!-- Tombol "Roti Manis" -->
+					<a href="product.php?kategori=roti-manis" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'roti-manis') ? 'how-active1' : ''; ?>">
+						Roti Manis
 					</a>
 
-					<a href="accessories-product.php" class="stext-106 stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
-						Fashion Accessories
+					<!-- Tombol "Roti Gurih" -->
+					<a href="product.php?kategori=roti-gurih" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'roti-gurih') ? 'how-active1' : ''; ?>">
+						Roti Gurih
 					</a>
 
-					<!-- <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Men">
-						Men
-					</button>
-
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".Accessories">
-						Accessories
-					</button> -->
+					<!-- Tombol "Kue & Pastry" -->
+					<a href="product.php?kategori=kue-pastry" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 <?php echo (isset($_GET['kategori']) && $_GET['kategori'] == 'kue-pastry') ? 'how-active1' : ''; ?>">
+						Kue & Pastry
+					</a>
 				</div>
 
 				<div class="flex-w flex-c-m m-tb-10">
