@@ -295,7 +295,7 @@ else
     <div class="minimarket-receipt">
         <div class="receipt-header">
             <h2>ROTI SAHABAT</h2>
-            <p>Jl. Roti Manis No. 123, Bandung<br>Telp: (+62) 812-3456-7890</p>
+            <p>Kedungjati, Jatisari, Kec. Kebumen, Kabupaten Kebumen, Jawa Tengah<br>Telp: (+62) 857 2983 0444</p>
         </div>
         
         <div class="divider"></div>
