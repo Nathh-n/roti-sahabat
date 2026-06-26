@@ -24,7 +24,6 @@ if(isset($_SESSION['login']))
             exit;
         }
 
-        $total_price = $row_o['price'] * $row_o['num_product'];
         $payment_status = ($row_o['payment']=='Cash on Delivery') ? 'BAYAR DI TEMPAT (COD)' : 'LUNAS (PAID)';
         $is_history = true;
     } 
@@ -43,15 +42,6 @@ if(isset($_SESSION['login']))
             $sql_select_o = "select * from `order` where `user_id`='$login_id' and `status`='placed'";
             $data_o = mysqli_query($conn,$sql_select_o);
             $row_o = mysqli_fetch_assoc($data_o);
-
-            $amt_total = "select * from `order` where `user_id`='$login_id' and `status`='placed'";
-            $data_total = mysqli_query($conn,$amt_total);
-
-            $total_price = 0;
-            while($row_total = mysqli_fetch_assoc($data_total))
-            {
-                $total_price = $total_price + $row_total['price'] * $row_total['num_product'];
-            }
 
             $sql_select_pay = "select `payment` from `order` where `user_id`='$login_id' and `status`='placed'";
             $data_pay = mysqli_query($conn,$sql_select_pay);
@@ -218,8 +208,13 @@ else
 									<th class="column-5">Subtotal</th>
 								</tr>
 
-						<?php if(isset($_SESSION['login'])) {
-						while($row = mysqli_fetch_assoc($data)) { ?>
+						<?php 
+                        $page_total = 0; // Variabel baru untuk menghitung total secara langsung!
+                        if(isset($_SESSION['login'])) {
+						    while($row = mysqli_fetch_assoc($data)) { 
+                                $sub_total = $row['num_product'] * $row['price'];
+                                $page_total += $sub_total; // Menambahkan nilai ke grand total
+                        ?>
 								<tr class="table_row">
 									<td class="column-1" align="center" data-label="Menu">
 										<div class="how-itemcart1">
@@ -238,10 +233,7 @@ else
 										<span style="font-weight: 700; background: #f9f9f9; padding: 5px 15px; border-radius: 5px;"><?php echo $row['num_product']; ?></span>
 									</td>
 									<td class="column-5" data-label="Subtotal" style="font-weight: 700; color: #2b003a;">
-										<?php 
-											$sub_total = $row['num_product'] * $row['price'];
-											echo 'Rp '. number_format($sub_total, 0, ',', '.');
-										 ?>
+										Rp <?php echo number_format($sub_total, 0, ',', '.'); ?>
 									</td>
 								</tr>
 						<?php } } ?>
@@ -265,7 +257,7 @@ else
 						<h4 class="section-title">Ringkasan Pembayaran</h4>
 						<div class="flex-w flex-t p-b-10" style="border-bottom: 1px dashed #eee;">
 							<div class="size-208"><span class="stext-110 cl2" style="color: #666;">Subtotal:</span></div>
-							<div class="size-209 text-right"><span class="mtext-110 cl2" style="font-weight: 600;"><?php echo "Rp " . number_format($total_price, 0, ',', '.'); ?></span></div>
+							<div class="size-209 text-right"><span class="mtext-110 cl2" style="font-weight: 600;"><?php echo "Rp " . number_format($page_total, 0, ',', '.'); ?></span></div>
 						</div>
 
 						<div class="flex-w flex-t p-t-10 p-b-20">
@@ -275,7 +267,7 @@ else
 
 						<div class="flex-w flex-t p-t-20 p-b-20" style="border-top: 2px solid #f9f9f9;">
 							<div class="size-208"><span class="mtext-101 cl2" style="color: #2b003a; font-weight: 800; font-size: 18px;">Total:</span></div>
-							<div class="size-209 p-t-1 text-right"><span class="mtext-110 cl2" style="color: #c2185b; font-weight: 800; font-size: 20px;"><?php echo "Rp " . number_format($total_price, 0, ',', '.'); ?></span></div>
+							<div class="size-209 p-t-1 text-right"><span class="mtext-110 cl2" style="color: #c2185b; font-weight: 800; font-size: 20px;"><?php echo "Rp " . number_format($page_total, 0, ',', '.'); ?></span></div>
 						</div>
 
 						<div class="text-center p-t-10">
@@ -284,9 +276,7 @@ else
                             </div>
 						</div>
 
-                        <!-- TOMBOL AKSI -->
                         <div class="action-buttons p-t-30">
-                            <!-- Tombol ini memicu struk kasir termal untuk di-PDF-kan -->
                             <button type="button" onclick="window.print()" class="btn-outline-custom">
                                 <i class="fa fa-download m-r-5"></i> Download Struk
                             </button>
@@ -302,8 +292,7 @@ else
 		</div>
 	</form>
 
-    <!-- STRUK KASIR MINIMARKET (Bersembunyi, Akan Muncul Saat Diprint/Download) -->
-	<div class="minimarket-receipt">
+    <div class="minimarket-receipt">
         <div class="receipt-header">
             <h2>ROTI SAHABAT</h2>
             <p>Jl. Roti Manis No. 123, Bandung<br>Telp: (+62) 812-3456-7890</p>
@@ -324,11 +313,13 @@ else
         
         <table style="width: 100%;">
             <?php 
+            $receipt_total = 0; // Variabel total khusus untuk Struk!
             // Kita kembalikan pointer ke 0 agar bisa di-loop lagi tanpa perlu query ke database
             if(mysqli_num_rows($data) > 0) {
                 mysqli_data_seek($data, 0);
                 while($row = mysqli_fetch_assoc($data)) { 
                     $sub = $row['num_product'] * $row['price'];
+                    $receipt_total += $sub;
             ?>
             <tr>
                 <td colspan="3"><?php echo $row['name']; ?> (<?php echo $row['size']; ?>)</td>
@@ -346,7 +337,7 @@ else
         <table style="width: 100%;">
             <tr>
                 <td>Subtotal</td>
-                <td class="text-right"><?php echo number_format($total_price, 0, ',', '.'); ?></td>
+                <td class="text-right"><?php echo number_format($receipt_total, 0, ',', '.'); ?></td>
             </tr>
             <tr>
                 <td>Ongkir</td>
@@ -354,7 +345,7 @@ else
             </tr>
             <tr>
                 <td><b>TOTAL</b></td>
-                <td class="text-right"><b><?php echo number_format($total_price, 0, ',', '.'); ?></b></td>
+                <td class="text-right"><b><?php echo number_format($receipt_total, 0, ',', '.'); ?></b></td>
             </tr>
         </table>
         

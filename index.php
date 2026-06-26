@@ -471,6 +471,64 @@ if (isset($_POST['cart_submit'])) {
 			box-shadow: 0 5px 15px rgba(128,0,128,0.3);
 			transform: translateY(-2px);
 		}
+
+		/* --- KODE TESTIMONI --- */
+		.sec-testimonial {
+			background-color: #fdf2f6; /* Warna pink sangat muda */
+			padding: 80px 0;
+		}
+		.testi-card {
+			background: #fff;
+			border-radius: 20px;
+			padding: 40px 30px;
+			text-align: center;
+			box-shadow: 0 10px 30px rgba(194, 24, 91, 0.05);
+			border: 1px solid #fae8ef;
+			transition: all 0.3s ease;
+			height: 100%;
+		}
+		.testi-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 15px 35px rgba(194, 24, 91, 0.1);
+		}
+		.testi-pic {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			overflow: hidden;
+			margin: 0 auto 20px;
+			border: 3px solid #c2185b;
+		}
+		.testi-pic img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.testi-text {
+			font-family: 'Poppins', sans-serif;
+			font-size: 15px;
+			color: #666;
+			line-height: 1.8;
+			font-style: italic;
+			margin-bottom: 20px;
+		}
+		.testi-name {
+			font-family: 'Playfair Display', serif;
+			font-size: 18px;
+			font-weight: 800;
+			color: #2b003a;
+		}
+		.testi-role {
+			font-family: 'Poppins', sans-serif;
+			font-size: 13px;
+			color: #c2185b;
+			font-weight: 600;
+		}
+		.testi-stars {
+			color: #ffc107; /* Warna kuning emas untuk bintang */
+			margin-bottom: 15px;
+			font-size: 18px;
+		}
 	</style>
 
 	<section class="hero-roti">
@@ -736,6 +794,81 @@ if (isset($_POST['cart_submit'])) {
 		</div>
 	</section>
 
+	<section class="sec-testimonial">
+		<div class="container">
+			<div class="p-b-40">
+				<h3 class="ltext-105 cl5 txt-center respon1" style="font-family: 'Playfair Display', serif; color: #2b003a; font-weight: 900;">
+					Kata Mereka Tentang Roti Sahabat
+				</h3>
+				<p class="text-center m-t-10" style="color: #666; font-family: 'Poppins', sans-serif;">
+					Ribuan pelanggan telah membuktikan kualitas dan kelezatan roti kami.
+				</p>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4 p-b-30">
+					<div class="testi-card">
+						<div class="testi-pic">
+							<img src="images/icons/user1.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'" alt="Pelanggan">
+						</div>
+						<div class="testi-stars">
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+						</div>
+						<p class="testi-text">
+							"Roti manisnya benar-benar lembut dan isiannya melimpah! Anak-anak saya sangat suka, selalu pesan untuk bekal sekolah. Pengirimannya juga sangat cepat dan aman."
+						</p>
+						<h5 class="testi-name">Amanda Rizki</h5>
+						<span class="testi-role">Ibu Rumah Tangga</span>
+					</div>
+				</div>
+
+				<div class="col-md-4 p-b-30">
+					<div class="testi-card">
+						<div class="testi-pic">
+							<img src="images/icons/user2.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'" alt="Pelanggan">
+						</div>
+						<div class="testi-stars">
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+						</div>
+						<p class="testi-text">
+							"Saya pesan dalam jumlah banyak untuk acara kantor, dan semuanya puas. Roti gurihnya sangat direkomendasikan. Pasti akan pesan lagi di Roti Sahabat untuk acara selanjutnya!"
+						</p>
+						<h5 class="testi-name">Budi Santoso</h5>
+						<span class="testi-role">Karyawan Swasta</span>
+					</div>
+				</div>
+
+				<div class="col-md-4 p-b-30">
+					<div class="testi-card">
+						<div class="testi-pic">
+							<img src="images/icons/user3.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'" alt="Pelanggan">
+						</div>
+						<div class="testi-stars">
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star-half-o"></i>
+						</div>
+						<p class="testi-text">
+							"Sering beli bolen dan pastry-nya. Kualitasnya setara dengan toko roti ternama di mall tapi dengan harga yang jauh lebih bersahabat. Recommended banget!"
+						</p>
+						<h5 class="testi-name">Siti Aminah</h5>
+						<span class="testi-role">Mahasiswi</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<section class="sec-contact-home">
 		<div class="container">
 			<div class="contact-box">
@@ -748,11 +881,11 @@ if (isset($_POST['cart_submit'])) {
 							
 							<div class="info-item">
 								<i class="fa fa-map-marker"></i>
-								<span>Jl. Roti Manis No. 123, Bandung</span>
+								<span>Kedungjati, Jatisari, Kec. Kebumen, Kabupaten Kebumen, Jawa Tengah</span>
 							</div>
 							<div class="info-item">
 								<i class="fa fa-phone"></i>
-								<span>+62 812-3456-7890</span>
+								<span>+6285729830444</span>
 							</div>
 							<div class="info-item">
 								<i class="fa fa-envelope"></i>

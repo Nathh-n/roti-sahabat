@@ -1,13 +1,12 @@
 <?php include_once 'site_connection.php'; ?>
 
 <?php
-
 if(isset($_SESSION['login']))
 {
-$login_id = $_SESSION['login'];
-$sql_select_login = "select * from `user_register` where `id`='$login_id'";
-$data_login = mysqli_query($conn,$sql_select_login);
-$row_login = mysqli_fetch_assoc($data_login);
+	$login_id = $_SESSION['login'];
+	$sql_select_login = "select * from `user_register` where `id`='$login_id'";
+	$data_login = mysqli_query($conn,$sql_select_login);
+	$row_login = mysqli_fetch_assoc($data_login);
 
 	if(isset($_GET['c_id']))
 	{
@@ -29,512 +28,204 @@ $row_login = mysqli_fetch_assoc($data_login);
 			$total_price = $total_price + $row_total['price'] * $row_total['num_product'];
 		}
 
-		// $sql_select_r = "select * from `user_register` where `id`='$cancel'";
-		// $data_r = mysqli_query($conn,$sql_select_r);
-		// $row_r = mysqli_fetch_assoc($data_r);
-
 		$sql_select_pay = "select `payment` from `order` where `id`='$cancel'";
 		$data_pay = mysqli_query($conn,$sql_select_pay);
 		$row_pay = mysqli_fetch_assoc($data_pay);
 
 		if ($row_pay['payment']=='Cash on Delivery') 
 		{
-			$payment_status = 'CASH ON DELIVERY';
+			$payment_status = 'BAYAR DI TEMPAT (COD)';
 		}
 		else
 		{
-			$payment_status = 'PAID';
+			$payment_status = 'LUNAS (PAID)';
 		}
-
 	}
 
-if (isset($_POST['yes'])) {
-	
-	$sql_update = "update `order` set `status`='Cancelled-By-Client' where `id`='$cancel'";
-	mysqli_query($conn,$sql_update);
+	if (isset($_POST['yes'])) {
+		$sql_update = "update `order` set `status`='Cancelled-By-Client' where `id`='$cancel'";
+		mysqli_query($conn,$sql_update);
+		header('location:canceled.php');
+	}
 
-	header('location:canceled.php');
-}
-
-if (isset($_POST['no']))
-{
-	header('location:order-list.php');
-}
-
+	if (isset($_POST['no'])) {
+		header('location:order-list.php');
+	}
 }
 else
 {
 	header('location:login_home.php');
 }
+?>
 
- ?>
-
-<html lang="en">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-	<title>Home</title>
+	<title>Batalkan Pesanan - Roti Sahabat</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="images/icons/favicon.png"/>
-<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon-roti.png"/>
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="fonts/linearicons-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/slick/slick.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/MagnificPopup/magnific-popup.css">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main_css.css">
-<!--===============================================================================================-->
 
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #fffafb; }
+        
+        .cancel-banner { background: #fff3cd; color: #856404; border-radius: 15px; padding: 40px 20px; text-align: center; margin-bottom: 40px; border: 2px solid #ffeeba; }
+        .cancel-banner h1 { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 28px; margin-bottom: 10px; }
+        .cancel-banner p { font-size: 15px; margin: 0; }
+        .cancel-icon { font-size: 50px; margin-bottom: 15px; display: block; color: #ffc107; }
+
+        .section-title { font-family: 'Playfair Display', serif; color: #2b003a; font-weight: 700; font-size: 22px; border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* Tabel Produk Layar Utama */
+        .wrap-table-shopping-cart { border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); background: #fff; overflow: hidden; border: none; }
+        .table-shopping-cart { width: 100%; border-collapse: collapse; }
+        .table-shopping-cart .table_head { background: #f9f9f9; }
+        .table-shopping-cart .table_head th { color: #333; padding: 15px; font-weight: 700; text-transform: uppercase; font-size: 13px; border-bottom: 2px solid #eee; text-align: left;}
+        .table-shopping-cart .table_row td { border-bottom: 1px dashed #eee; vertical-align: middle; padding: 20px 15px; }
+        .how-itemcart1 { width: 70px; height: 70px; border-radius: 10px; overflow: hidden; margin: 0 auto;}
+        .how-itemcart1 img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .info-card { background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); padding: 30px; margin-bottom: 30px; border-top: 4px solid #c2185b;}
+        .info-text { font-size: 14px; color: #555; margin-bottom: 12px; line-height: 1.6; }
+        .info-text b { color: #2b003a; display: inline-block; min-width: 130px; }
+        .payment-status-badge { display: inline-block; padding: 10px 20px; border-radius: 30px; font-weight: 700; font-size: 14px; background: #e8f5e9; color: #28a745; border: 1px solid #c3e6cb; margin-top: 15px; letter-spacing: 1px;}
+        
+        .btn-danger-custom { background: #dc3545; color: white; border-radius: 30px; font-weight: 600; padding: 12px 30px; border: none; transition: 0.3s; margin-top: 10px; display: inline-block; width: 100%; margin-bottom: 10px; cursor: pointer;}
+        .btn-danger-custom:hover { background: #c82333; color: white; text-decoration: none; }
+        .btn-outline-custom { background: transparent; color: #2b003a; border: 2px solid #2b003a; border-radius: 30px; font-weight: 600; padding: 10px 25px; transition: 0.3s; display: inline-block; margin-top: 10px; width: 100%; text-align: center; cursor: pointer;}
+        .btn-outline-custom:hover { background: #2b003a; color: white; text-decoration: none; }
+
+    </style>
 </head>
 <body class="animsition">
 
 	<header class="header-v4">
-		<!-- Header desktop -->
-		<div class="container-menu-desktop">
-			<!-- Topbar -->
-			<div class="top-bar">
-				<div class="content-topbar flex-sb-m h-full container">
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Help & FAQs
-						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							EN
-						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							INR
-						</a>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<div class="profile-main-menu">
-							<a href="#" class="flex-c-m trans-04 p-lr-25" style="border-left: 0">My Account</a>
-								<ul class="profile-sub-menu">
-									<li><h5><?php echo $row_login['name']; ?></h5></li>
-									<li><a href="my_profile.php">My Profile</a></li>
-									<li><a href="order-list.php">Order List</a></li>
-									<li><a href="shoping-cart.php">My Cart</a></li>
-									<li><a href="logouts.php">Logout</a></li>
-								</ul>
-							</div>
-						<?php }
-						else{ ?>
-							<a href="login_home.php" class="flex-c-m trans-04 p-lr-25">
-								Login / Sign-in
-							</a>
-						<?php } ?>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<a style="color: #b2b2b2;" class="flex-c-m trans-04 p-lr-25">
-								Hello...<?php echo $row_login['name']; ?>!
-							</a>
-						<?php } ?>
-					</div>
-				</div>
-			</div>
-
-			<div class="wrap-menu-desktop">
-				<nav class="limiter-menu-desktop container">
-					
-					<!-- Logo desktop -->		
-					<a href="index.php" class="logo">
-						<img src="images/icons/logo-01.png" alt="IMG-LOGO">
-					</a>
-
-					<!-- Menu desktop -->
-					<!-- <div class="menu-desktop">
-						<ul class="main-menu">
-							<li class="active-menu">
-								<a href="index.php">Home</a>
-								<ul class="sub-menu">
-									<li><a href="index.php">Homepage 1</a></li>
-									<li><a href="index.php">Homepage 2</a></li>
-									<li><a href="index.php">Homepage 3</a></li>
-								</ul>
-							</li>
-
-							<li>
-								<a href="product.php">Shop</a>
-							</li>
-
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.php">Shopping Cart</a>
-							</li>
-
-							<li>
-								<a href="blog.php">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.php">About</a>
-							</li>
-
-							<li>
-								<a href="contact.php">Contact</a>
-							</li>
-						</ul>
-					</div> -->	
-
-					<!-- Icon header -->
-					<!-- <div class="wrap-icon-header flex-w flex-r-m" id="cart_data_count">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-							<i class="zmdi zmdi-search"></i>
-						</div>
-
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="
-						<?php if (isset($_SESSION['login']))
-						{ echo $data_count; }
-						else{
-							echo "0";
-						} ?>">
-							<i class="zmdi zmdi-shopping-cart"></i>
-						</div>
-
-						<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti" data-notify="0">
-							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
-					</div> -->
-				</nav>
-			</div>	
-		</div>
-
-		<!-- Header Mobile -->
-		<div class="wrap-header-mobile">
-			<!-- Logo moblie -->		
-			<div class="logo-mobile">
-				<a href="index.php"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
-			</div>
-
-			<!-- Icon header -->
-			<!-- <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-					<i class="zmdi zmdi-search"></i>
-				</div>
-
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="8">
-					<i class="zmdi zmdi-shopping-cart"></i>
-				</div>
-
-				<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti" data-notify="0">
-					<i class="zmdi zmdi-favorite-outline"></i>
-				</a>
-			</div> -->
-
-			<!-- Button show menu -->
-			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-				<span class="hamburger-box">
-					<span class="hamburger-inner"></span>
-				</span>
-			</div>
-		</div>
-
-
-		<!-- Menu Mobile -->
-		<div class="menu-mobile">
-			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
-
-				<li>
-					<div class="right-top-bar flex-w">
-						<a href="#" class="flex-c-m p-lr-13 trans-04">
-							Help & FAQs
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-13 trans-04">
-							INR
-						</a>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<div class="profile-main-menu-m">
-							<a href="#" class="flex-c-m trans-04 p-lr-25" style="border-left: 0">My Account</a>
-								<ul class="profile-sub-menu-m">
-									<li><h5><?php echo $row_login['name']; ?></h5></li>
-									<li><a href="index.php" class="right-top-bar-2">My Profile</a></li>
-									<li><a href="index.php">Order List</a></li>
-									<li><a href="shoping-cart.php">My Cart</a></li>
-									<li><a href="logout.php">Logout</a></li>
-								</ul>
-							</div>
-						<?php }
-						else{ ?>
-							<a href="login_home.php" class="flex-c-m trans-04 p-lr-25">
-								Login / Sign-in
-							</a>
-						<?php } ?>
-
-						<?php if (isset($_SESSION['login']))
-						{ ?>
-							<a style="color: #b2b2b2;" class="flex-c-m trans-04 p-lr-15">
-								Hello... <?php echo $row_login['name']; ?>!
-							</a>
-						<?php } ?>
-					</div>
-				</li>
-			</ul>
-
-			<!-- <ul class="main-menu-m">
-				<li>
-					<a href="index.php">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="index.php">Homepage 1</a></li>
-						<li><a href="home-02.php">Homepage 2</a></li>
-						<li><a href="home-03.php">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
-				</li>
-
-				<li>
-					<a href="product.php">Shop</a>
-				</li>
-
-				<li>
-					<a href="shoping-cart.php" class="label1 rs1" data-label1="hot">Shopping Cart</a>
-				</li>
-
-				<li>
-					<a href="blog.php">Blog</a>
-				</li>
-
-				<li>
-					<a href="about.php">About</a>
-				</li>
-
-				<li>
-					<a href="contact.php">Contact</a>
-				</li>
-			</ul> -->
-		</div>
-
-		<!-- Modal Search -->
-		<!-- <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-			<div class="container-search-header">
-				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-					<img src="images/icons/icon-close2.png" alt="CLOSE">
-				</button>
-
-				<form class="wrap-search-header flex-w p-l-15">
-					<button class="flex-c-m trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
-				</form>
-			</div>
-		</div> -->
+        <?php include_once 'header.php'; ?>
 	</header>
 
 	<div class="container">
-		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-15 p-lr-0-lg">
+		<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-b-20 p-lr-0-lg">
 			<a href="index.php" class="stext-109 cl8 hov-cl1 trans-04">
-				Home
-				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+				Beranda <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
-
-			<a href="shoping-cart.php" class="stext-109 cl8 hov-cl1 trans-04">
-				Shoping Cart
-				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-			</a>
-
 			<a href="order-list.php" class="stext-109 cl8 hov-cl1 trans-04">
-				Order-list
-				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+				Riwayat Pesanan <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
-
-			<span class="stext-109 cl4">
-				Cancel-order
-			</span>
+			<span class="stext-109 cl4">Batalkan Pesanan</span>
 		</div>
 	</div>
 
-	<div class="order_placed">
-		<h1>Are you sure to cancel the order...?</h1>
-		<h3>Note: If alreay paid then payment will be refunded within 7 working days...</h3>
-	</div>
+	<div class="container">
+        <div class="cancel-banner m-lr-25 m-lr-0-xl">
+            <i class="fa fa-exclamation-triangle cancel-icon"></i>
+            <h1>Apakah Sahabat Yakin Ingin Membatalkan Pesanan?</h1>
+            <p>Catatan: Jika pesanan sudah dibayar via transfer, dana akan dikembalikan maksimal 7 hari kerja ke rekening Anda.</p>
+        </div>
+    </div>
 
 	<form method="post">
-	<div class="flex-w button">
-		<button class="flex-c-m stext-101 cl0 size-104 bg3 bor14 hov-btn3 m-r-5 p-lr-15 m-t-15 trans-04 pointer" name="yes">
-			Yes
-		</button>
-
-		<button class="flex-c-m stext-101 cl0 size-104 bg3 bor14 hov-btn3 m-l-5 p-lr-15 m-t-15 trans-04 pointer" name="no">
-			No
-		</button>
-	</div>
-	</form>
-
-	<!-- Shoping Cart -->
-<div id="new_number_of_product">
-	<form class="bg0 p-t-45 p-b-85" method="post">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+				<div class="col-lg-7 col-xl-7 m-b-50">
 					<div class="m-l-25 m-r--38 m-lr-0-xl">
+                        <h4 class="section-title">Detail Roti yang Dibatalkan</h4>
 						<div class="wrap-table-shopping-cart">
-							<table class="table-shopping-cart" align="center">
+							<table class="table-shopping-cart">
 								<tr class="table_head">
-									<th class="column-1">Product</th>
-									<th class="column-2"></th>
-									<th class="column-3">Price</th>
-									<th class="column-4">Quantity</th>
-									<th class="column-5">Total</th>
+									<th class="column-1" style="text-align: center;">Menu</th>
+									<th class="column-2">Detail Roti</th>
+									<th class="column-3">Harga</th>
+									<th class="column-4" style="text-align: center;">Qty</th>
+									<th class="column-5">Subtotal</th>
 								</tr>
 
-						<?php if(isset($_SESSION['login']))
-						{
+						<?php if(isset($_SESSION['login'])) {
 						while($row = mysqli_fetch_assoc($data)) { ?>
 								<tr class="table_row">
 									<td class="column-1" align="center">
 										<div class="how-itemcart1">
-											<img src="admin/image/<?php echo $row['image']; ?>">
+											<img src="admin/image/<?php echo $row['image']; ?>" alt="Roti">
 										</div>												
 									</td>
 									<td class="column-2">
-										<div class="p-b-10"><?php echo $row['name']; ?></div>
-										<ul>
-											<li><b>Size : </b><?php echo $row['size']; ?></li>
-											<li><b>Color : </b><?php echo $row['color']; ?></li>
+										<div class="p-b-10" style="font-weight: 700; color: #2b003a; font-size: 15px;"><?php echo $row['name']; ?></div>
+										<ul style="font-size: 12px; color: #666;">
+											<li><b>Ukuran : </b><?php echo $row['size']; ?></li>
+											<li><b>Varian : </b><?php echo $row['color']; ?></li>
 										</ul>	
 									</td>
-									<td class="column-3">Rs.<?php echo $row['price']; ?></td>
+									<td class="column-3" style="color: #c2185b; font-weight: 600;">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></td>
 									<td class="column-4" align="center">
-										<span class="num_pro"><?php echo $row['num_product']; ?></span>
+										<span style="font-weight: 700; background: #f9f9f9; padding: 5px 15px; border-radius: 5px;"><?php echo $row['num_product']; ?></span>
 									</td>
-									<td class="column-5">
+									<td class="column-5" style="font-weight: 700; color: #2b003a;">
 										<?php 
-
-											$total_pro = $row['num_product'];
-											$price = $row['price'];
-
-											echo 'Rs.'.$total_pro*$price;
+											$sub_total = $row['num_product'] * $row['price'];
+											echo 'Rp '. number_format($sub_total, 0, ',', '.');
 										 ?>
-									</td>
-									<td>
-										
 									</td>
 								</tr>
 						<?php } } ?>
 
 							</table>
 						</div>
-
-						<div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-							<div class=" m-r-20 m-tb-5">
-								<div class="order_text cl2 m-b-20 m-t-15"><b>Product to be delivered at : </b> <?php echo $row_o['address']; ?>, <?php echo $row_o['city']; ?>, <?php echo $row_o['pincode']; ?></div>
-
-								<div class="order_text cl2 m-b-20"><b>Ordered By : </b> <?php echo $row_o['cust_name']; ?></div>
-								<div class="order_text cl2 m-b-20"><b>Mobile No : </b> <?php echo $row_o['mobile']; ?></div>
-								<div class="order_text cl2 m-b-40"><b>Email ID : </b> <?php echo $row_o['email']; ?></div>
-							
-
-							</div>
-						</div>
 					</div>
 				</div>
 
-				<div class="col-sm-12 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-						<h4 class="mtext-109 cl2 p-b-50">
-							Total Amount
-						</h4>
+				<div class="col-lg-5 col-xl-5 m-b-50">
+					<div class="info-card m-l-40 m-lr-0-xl p-lr-15-sm">
+						
+                        <h4 class="section-title">Informasi Pengiriman</h4>
+                        <div class="m-b-30">
+                            <div class="info-text"><b>Penerima</b>: <?php echo $row_o['cust_name']; ?></div>
+                            <div class="info-text"><b>No. HP</b>: <?php echo $row_o['mobile']; ?></div>
+                            <div class="info-text"><b>Alamat</b>: <?php echo $row_o['address']; ?>, <?php echo $row_o['city']; ?>, <?php echo $row_o['pincode']; ?></div>
+                        </div>
 
-						<div class="flex-w flex-t bor12 p-b-13">
-							<div class="size-208">
-								<span class="stext-110 cl2 ">
-									Subtotal:
-								</span>
-							</div>
-
-							<div class="size-209">
-								<span class="mtext-110 cl2">
-									<?php if(isset($_SESSION['login'])) { ?>
-										Rs.<?php echo $total_price; ?>
-									<?php }
-									else {
-										echo "Rs.0";
-									} ?>
-								</span>
-							</div>
+						<h4 class="section-title">Ringkasan Nilai Pesanan</h4>
+						<div class="flex-w flex-t p-b-10" style="border-bottom: 1px dashed #eee;">
+							<div class="size-208"><span class="stext-110 cl2" style="color: #666;">Subtotal:</span></div>
+							<div class="size-209 text-right"><span class="mtext-110 cl2" style="font-weight: 600;"><?php echo "Rp " . number_format($total_price, 0, ',', '.'); ?></span></div>
 						</div>
 
-						<div class="flex-w flex-t bor12 p-t-15 p-b-30">
-							<div class="size-208 w-full-ssm">
-								<span class="stext-110 cl2">
-									Shipping:
-								</span>
-							</div>
-
-							<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-								<p class="stext-111 cl6 p-t-2">
-									Rs. 0
-								</p>
-							</div>
+						<div class="flex-w flex-t p-t-10 p-b-20">
+							<div class="size-208"><span class="stext-110 cl2" style="color: #666;">Ongkos Kirim:</span></div>
+							<div class="size-209 text-right"><p class="stext-111" style="font-weight: 600; color: #28a745;">Gratis</p></div>
 						</div>
 
-						<div class="flex-w flex-t p-t-27 p-b-33">
-							<div class="size-208">
-								<span class="mtext-101 cl2">
-									Total:
-								</span>
-							</div>
-
-							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2">
-									<?php if(isset($_SESSION['login'])) { ?>
-										Rs.<?php echo $total_price; ?>
-									<?php }
-									else {
-										echo "Rs.0";
-									} ?>
-								</span>
-							</div>
+						<div class="flex-w flex-t p-t-20 p-b-20" style="border-top: 2px solid #f9f9f9;">
+							<div class="size-208"><span class="mtext-101 cl2" style="color: #2b003a; font-weight: 800; font-size: 18px;">Total Batal:</span></div>
+							<div class="size-209 p-t-1 text-right"><span class="mtext-110 cl2" style="color: #dc3545; font-weight: 800; font-size: 20px;"><?php echo "Rp " . number_format($total_price, 0, ',', '.'); ?></span></div>
 						</div>
 
-						<div class="p-b-13">
-							<h1 class="payment_status"><?php echo $payment_status; ?></h1>
+						<div class="text-center p-t-10">
+							<div class="payment-status-badge">
+                                <i class="fa fa-info-circle m-r-5"></i> Metode Pembayaran: <?php echo $payment_status; ?>
+                            </div>
 						</div>
+
+                        <!-- TOMBOL AKSI -->
+                        <div class="p-t-30">
+                            <button type="submit" name="yes" class="btn-danger-custom">
+                                <i class="fa fa-times-circle m-r-5"></i> Ya, Batalkan Pesanan Ini
+                            </button>
+                            <button type="submit" name="no" class="btn-outline-custom">
+                                Tidak, Kembali ke Riwayat
+                            </button>
+                        </div>
 						
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
-</div>
-
 
 	<?php include_once 'footer.php'; ?>
-
 	<?php include_once 'scripts.php'; ?>
+</body>
+</html>

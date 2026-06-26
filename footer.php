@@ -64,7 +64,7 @@
 					</p>
 
 					<div class="p-t-27">
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						<a href="https://www.facebook.com/sri.yuliyanti.735" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-facebook"></i>
 						</a>
 
@@ -72,7 +72,7 @@
 							<i class="fa fa-instagram"></i>
 						</a>
 
-						<a href="wa.me/6285729830444" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						<a href="https://wa.me/6285729830444" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-whatsapp"></i>
 						</a>
 					</div>
